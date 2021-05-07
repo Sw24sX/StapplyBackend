@@ -13,3 +13,10 @@
 ```
   mvnw spring-boot:run
 ```
+
+---
+
+Для перехода в консоль H2 перейти по адресу
+```
+http://localhost:8080/h2-console
+```
