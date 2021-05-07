@@ -1,5 +1,7 @@
 package com.stapply.backend.stapply.models;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,6 +10,7 @@ public class AppMain {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(notes = "this is id in database")
     private Long id;
 
     @Column(name = "NAME")

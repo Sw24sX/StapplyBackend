@@ -2,7 +2,7 @@ package com.stapply.backend.stapply.controller;
 
 import com.stapply.backend.stapply.models.AppMain;
 import com.stapply.backend.stapply.service.AppMainService;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +20,13 @@ public class AppMainController {
         this.appService = appService;
     }
 
+    @ApiOperation(value = "Get all apps for main page", response = AppMain[].class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })
     @GetMapping
     public ResponseEntity<List<AppMain>> getAllAppsMain() {
         final var result = appService.findAll();
@@ -28,6 +35,7 @@ public class AppMainController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @ApiOperation(value = "Get one app by id", response = AppMain.class)
     @GetMapping("/{id}")
     public ResponseEntity<?> getAppMain(@PathVariable(name = "id")Long id) {
         final var result = appService.findById(id);
@@ -36,6 +44,7 @@ public class AppMainController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @ApiOperation(value = "Change app name by id")
     @PutMapping("/{id}")
     public ResponseEntity<?> changeName(@PathVariable(name = "id")Long id, @RequestBody AppMain appWithNewName) {
         final var app = appService.findById(id);
@@ -49,6 +58,7 @@ public class AppMainController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @ApiOperation(value = "Delete app by id")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAppMain(@PathVariable(name = "id")Long id) {
         final var result = appService.delete(id);
