@@ -23,7 +23,7 @@ http://localhost:8080/h2-console
 
 ---
 
-#API
+# API
 Для просмотра документации перейти по ссыке:
 ```
 http://localhost:8080/swagger-ui.html
