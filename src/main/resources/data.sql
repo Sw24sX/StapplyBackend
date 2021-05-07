@@ -1,13 +1,13 @@
-DROP TABLE IF EXISTS billionaires;
+DROP TABLE IF EXISTS Clients;
 
-CREATE TABLE billionaires (
+CREATE TABLE Clients (
     id INT AUTO_INCREMENT  PRIMARY KEY,
     first_name VARCHAR(250) NOT NULL,
     last_name VARCHAR(250) NOT NULL,
-    career VARCHAR(250) DEFAULT NULL
+    phone VARCHAR(250) DEFAULT NULL
 );
 
-INSERT INTO billionaires (first_name, last_name, career) VALUES
-('Aliko', 'Dangote', 'Billionaire Industrialist'),
-('Bill', 'Gates', 'Billionaire Tech Entrepreneur'),
-('Folrunsho', 'Alakija', 'Billionaire Oil Magnate');
+INSERT INTO Clients (first_name, last_name, phone) VALUES
+('Aliko', 'Dangote', '215343581'),
+('Bill', 'Gates', '6841351854'),
+('Folrunsho', 'Alakija', '534464684');
