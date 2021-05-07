@@ -16,4 +16,33 @@ public class AppMainServiceImpl implements AppMainService{
     public List<AppMain> findAll() {
         return appRepository.findAll();
     }
+
+    @Override
+    public AppMain findById(Long id) {
+        if(!appRepository.existsById(id))
+            return null;
+        return appRepository.findById(id).get();
+    }
+
+    @Override
+    public boolean update(Long id, AppMain app) {
+        if(!appRepository.existsById(id))
+            return false;
+        app.setId(id);
+        appRepository.save(app);
+        return true;
+    }
+
+    @Override
+    public boolean delete(Long id) {
+        if(!appRepository.existsById(id))
+            return false;
+        appRepository.deleteById(id);
+        return true;
+    }
+
+    @Override
+    public void crate(AppMain app) {
+        appRepository.save(app);
+    }
 }

@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface AppMainService {
     List<AppMain> findAll();
+    AppMain findById(Long id);
+    boolean update(Long id, AppMain app);
+    boolean delete(Long id);
+    void crate(AppMain app);
 }

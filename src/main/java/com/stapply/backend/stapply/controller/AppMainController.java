@@ -5,8 +5,7 @@ import com.stapply.backend.stapply.service.AppMainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +19,35 @@ public class AppMainController {
         final var result = appService.findAll();
         return result != null && !result.isEmpty() ?
                 new ResponseEntity<>(result, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/apps/{id}")
+    public ResponseEntity<?> getAppMain(@PathVariable(name = "id")Long id) {
+        final var result = appService.findById(id);
+        return result != null ?
+                new ResponseEntity<>(result, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/apps/{id}")
+    public ResponseEntity<?> changeName(@PathVariable(name = "id")Long id, @RequestBody AppMain appWithNewName) {
+        final var app = appService.findById(id);
+        if(app == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        //todo validate name
+        app.setName(appWithNewName.getName());
+        final var result = appService.update(id, app);
+        return result ?
+                new ResponseEntity<>(HttpStatus.ACCEPTED) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/apps/{id}")
+    public ResponseEntity<?> deleteAppMain(@PathVariable(name = "id")Long id) {
+        final var result = appService.delete(id);
+        return result ?
+                new ResponseEntity<>(HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
