@@ -79,12 +79,17 @@ public class AppMainController {
 
     @ApiOperation(value = "Test custom output")
     @GetMapping("/test")
-    public ResponseEntity<Stream<SmallApp>> getAllTEstAppMain() {
+    public ResponseEntity<Stream<SmallApp>> getAllTestAppMain() {
         final var result = appService.findAll().stream().map(SmallApp::new);
         return result != null ?
                 new ResponseEntity<>(result, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+//    @PutMapping("/{id}/src")
+//    public ResponseEntity<?> updateSrcInApp(@PathVariable(name = "id")Long id, @RequestBody AppMain app) {
+//        final var oldApp = appService.findById(id);
+//    }
 }
 
 class SmallApp {

@@ -25,6 +25,14 @@ public class AppMain {
     @Column(name = "IMAGE_SRC")
     private String imageSrc;
 
+    public String getGooglePlaySrc() {
+        return googlePlaySrc;
+    }
+
+    public void setGooglePlaySrc(String googlePlaySrc) {
+        this.googlePlaySrc = googlePlaySrc;
+    }
+
     @Column(name = "GOOGLE_PLAY_SPC")
     private String googlePlaySrc;
 
