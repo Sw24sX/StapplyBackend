@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS Clients;
+/* DROP TABLE IF EXISTS Clients;
 
 CREATE TABLE Clients (
     id INT AUTO_INCREMENT  PRIMARY KEY,
@@ -55,4 +55,4 @@ INSERT INTO APPMAIN(name, developer, AVATAR_SRC, IMAGE_SRC) VALUES
  'https://play-lh.googleusercontent.com/U--y9KFmvZ-N2IPc_QuFvjt9113Mh48Qn6GtxQBYjBpNtG-lR9nTd3AFFB8PKIqkkyA=w1920-h1095-rw'),
 ('Twitch_10', 'Twitch 10 Interactive, Inc.',
  'https://play-lh.googleusercontent.com/QLQzL-MXtxKEDlbhrQCDw-REiDsA9glUH4m16syfar_KVLRXlzOhN7tmAceiPerv4Jg=s180-rw',
- 'https://play-lh.googleusercontent.com/U--y9KFmvZ-N2IPc_QuFvjt9113Mh48Qn6GtxQBYjBpNtG-lR9nTd3AFFB8PKIqkkyA=w1920-h1095-rw');
+ 'https://play-lh.googleusercontent.com/U--y9KFmvZ-N2IPc_QuFvjt9113Mh48Qn6GtxQBYjBpNtG-lR9nTd3AFFB8PKIqkkyA=w1920-h1095-rw'); */

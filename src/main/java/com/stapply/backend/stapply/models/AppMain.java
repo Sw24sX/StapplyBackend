@@ -25,6 +25,9 @@ public class AppMain {
     @Column(name = "IMAGE_SRC")
     private String imageSrc;
 
+    @Column(name = "GOOGLE_PLAY_SPC")
+    private String googlePlaySrc;
+
     public Long getId() {
         return id;
     }
