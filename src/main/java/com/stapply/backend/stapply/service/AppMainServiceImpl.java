@@ -9,8 +9,12 @@ import java.util.List;
 
 @Service
 public class AppMainServiceImpl implements AppMainService{
+    private final AppRepository appRepository;
+
     @Autowired
-    private AppRepository appRepository;
+    public AppMainServiceImpl(AppRepository appRepository) {
+        this.appRepository = appRepository;
+    }
 
     @Override
     public List<AppMain> findAll() {
@@ -42,7 +46,7 @@ public class AppMainServiceImpl implements AppMainService{
     }
 
     @Override
-    public void crate(AppMain app) {
+    public void create(AppMain app) {
         appRepository.save(app);
     }
 }

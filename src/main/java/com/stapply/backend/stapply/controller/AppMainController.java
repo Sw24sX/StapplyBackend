@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/apps")
@@ -65,5 +66,49 @@ public class AppMainController {
         return result ?
                 new ResponseEntity<>(HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @ApiOperation(value = "Test custom output")
+    @GetMapping("/test/{id}")
+    public ResponseEntity<?> getTestAppMain(@PathVariable(name = "id")Long id) {
+        final var result = new SmallApp(appService.findById(id));
+        return result != null ?
+                new ResponseEntity<>(result, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @ApiOperation(value = "Test custom output")
+    @GetMapping("/test")
+    public ResponseEntity<Stream<SmallApp>> getAllTEstAppMain() {
+        final var result = appService.findAll().stream().map(SmallApp::new);
+        return result != null ?
+                new ResponseEntity<>(result, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+
+class SmallApp {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private Long id;
+    private String name;
+
+    public SmallApp(AppMain app) {
+        this.id = app.getId();
+        this.name = app.getName();
     }
 }

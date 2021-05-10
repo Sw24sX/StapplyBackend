@@ -9,5 +9,5 @@ public interface AppMainService {
     AppMain findById(Long id);
     boolean update(Long id, AppMain app);
     boolean delete(Long id);
-    void crate(AppMain app);
+    void create(AppMain app);
 }
