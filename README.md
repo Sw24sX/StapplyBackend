@@ -23,8 +23,8 @@ http://localhost:8080/h2-console
 
 ---
 
-#API
-Получение списка отслеживаемых приложений: GET
+# API
+Для просмотра документации перейти по ссыке:
 ```
-/apps/
+http://localhost:8080/swagger-ui.html
 ```
