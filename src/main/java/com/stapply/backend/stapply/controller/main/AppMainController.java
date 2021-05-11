@@ -1,4 +1,4 @@
-package com.stapply.backend.stapply.controller;
+package com.stapply.backend.stapply.controller.main;
 
 import com.stapply.backend.stapply.models.AppMain;
 import com.stapply.backend.stapply.service.AppMainService;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @RestController
-@RequestMapping("/apps")
+@RequestMapping("/api/apps")
 public class AppMainController {
     private final AppMainService appService;
 
@@ -29,11 +29,12 @@ public class AppMainController {
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
     @GetMapping
-    public ResponseEntity<List<AppMain>> getAllAppsMain() {
-        final var result = appService.findAll();
-        return result != null && !result.isEmpty() ?
-                new ResponseEntity<>(result, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Stream<AppMainPage>> getAllAppsMain() {
+        final var allApps = appService.findAll();
+        if(allApps == null || allApps.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        final var result = allApps.stream().map(AppMainPage::new);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get one app by id", response = AppMain.class)
@@ -71,7 +72,7 @@ public class AppMainController {
     @ApiOperation(value = "Test custom output")
     @GetMapping("/test/{id}")
     public ResponseEntity<?> getTestAppMain(@PathVariable(name = "id")Long id) {
-        final var result = new SmallApp(appService.findById(id));
+        final var result = new AppMainPage(appService.findById(id));
         return result != null ?
                 new ResponseEntity<>(result, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -79,41 +80,10 @@ public class AppMainController {
 
     @ApiOperation(value = "Test custom output")
     @GetMapping("/test")
-    public ResponseEntity<Stream<SmallApp>> getAllTestAppMain() {
-        final var result = appService.findAll().stream().map(SmallApp::new);
+    public ResponseEntity<Stream<AppMainPage>> getAllTestAppMain() {
+        final var result = appService.findAll().stream().map(AppMainPage::new);
         return result != null ?
                 new ResponseEntity<>(result, HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-//    @PutMapping("/{id}/src")
-//    public ResponseEntity<?> updateSrcInApp(@PathVariable(name = "id")Long id, @RequestBody AppMain app) {
-//        final var oldApp = appService.findById(id);
-//    }
-}
-
-class SmallApp {
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    private Long id;
-    private String name;
-
-    public SmallApp(AppMain app) {
-        this.id = app.getId();
-        this.name = app.getName();
     }
 }
