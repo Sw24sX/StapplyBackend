@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -80,10 +81,14 @@ public class AppMainController {
 
     @ApiOperation(value = "Test custom output")
     @GetMapping("/test")
-    public ResponseEntity<Stream<AppMainPage>> getAllTestAppMain() {
-        final var result = appService.findAll().stream().map(AppMainPage::new);
-        return result != null ?
-                new ResponseEntity<>(result, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> getAllTestAppMain() {
+        final var result = appService.findAll();
+        var t = new ArrayList<String>();
+        t.add("https://play-lh.googleusercontent.com/U--y9KFmvZ-N2IPc_QuFvjt9113Mh48Qn6GtxQBYjBpNtG-lR9nTd3AFFB8PKIqkkyA=w1920-h1095-rw");
+        for (var app : result) {
+            app.setImageSrcList(t);
+            appService.update(app.getId(), app);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
