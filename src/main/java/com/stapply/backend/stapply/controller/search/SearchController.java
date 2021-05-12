@@ -1,35 +1,51 @@
 package com.stapply.backend.stapply.controller.search;
 
 import com.stapply.backend.stapply.parser.mainscraper.ScraperFabric;
-import com.stapply.backend.stapply.parser.mainscraper.SearchApp;
 import com.stapply.backend.stapply.parser.scraper.StoreScraper;
 import com.stapply.backend.stapply.parser.scraper.search.SearchAppImplInfo;
+import com.stapply.backend.stapply.service.AppMainService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URISyntaxException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/search")
 public class SearchController {
     private final StoreScraper googlePlayScraper;
     private final StoreScraper appStoreScraper;
+    private final AppMainService appService;
 
-    public SearchController() {
+    @Autowired
+    public SearchController(AppMainService appService) {
         this.appStoreScraper = ScraperFabric.AppStoreScraper();
         this.googlePlayScraper = ScraperFabric.GooglePlayScraper();
+        this.appService = appService;
     }
 
+//    @PostMapping
+//    public ResponseEntity<List<SearchApp>> addApp(@RequestBody AddApp app) {
+//        //todo validate links
+//
+//    }
+
     @GetMapping("/{query}")
-    public ResponseEntity<List<SearchApp>> search(@PathVariable(name = "query")String query, @RequestParam(defaultValue = "3")String accuracy) {
+    @ApiOperation(value = "Search on Google play and AppStore. Uses the Levenshtein distance")
+    public ResponseEntity<List<SearchApp>> search(
+            @PathVariable(name = "query")
+            @ApiParam(value = "User's search query")
+                    String query,
+            @RequestParam(defaultValue = "3")
+            @ApiParam(value = "Length differences in app names", format = "integer")
+                    String accuracy) {
         int acc;
         try {
             acc = Integer.parseInt(accuracy);
@@ -91,6 +107,4 @@ public class SearchController {
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
-
 }
