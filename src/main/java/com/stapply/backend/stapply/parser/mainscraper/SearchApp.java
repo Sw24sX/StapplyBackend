@@ -1,5 +1,7 @@
 package com.stapply.backend.stapply.parser.mainscraper;
 
+import com.stapply.backend.stapply.parser.scraper.search.SearchAppImplInfo;
+
 import java.util.Arrays;
 
 public class SearchApp {
@@ -99,5 +101,17 @@ public class SearchApp {
     private static int min(int... numbers) {
         return Arrays.stream(numbers)
                 .min().orElse(Integer.MAX_VALUE);
+    }
+
+    public static SearchApp fromGoogleApp(SearchAppImplInfo gp, Integer id) {
+        var app = new SearchApp();
+        app.setName(gp.name);
+        app.setAvatarSrc(gp.imageSrc);
+        var developer = gp.otherParameters.get("developer");
+        app.setDeveloper(developer);
+        var srcGoogle = String.format("https://play.google.com/store/apps/details?id=%s&hl=ru&gl=US", gp.id);
+        app.setLinkGooglePlay(srcGoogle);
+        app.setId(id);
+        return app;
     }
 }

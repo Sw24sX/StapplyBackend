@@ -23,7 +23,9 @@ public class GooglePlaySearchScraper extends StoreSearchScraper {
     @Override
     public void setQueryParameters(URIBuilder builder, String query) {
         builder.setParameter("q", query)
-                .setParameter("c", "apps");
+                .setParameter("c", "apps")
+                .setParameter("hl", "ru")
+                .setParameter("gl", "US");
     }
 
     @Override
