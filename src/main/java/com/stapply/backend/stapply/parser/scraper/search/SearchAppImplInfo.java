@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class SearchAppImplInfo extends AppImpl {
 
-    public final Map<String, String> otherParameters;
+    public final HashMap<String, String> otherParameters;
 
     public SearchAppImplInfo(String image, String name, String id) {
         super(id, name, image);

@@ -72,4 +72,8 @@ public class AppStoreSearchScraper extends StoreSearchScraper {
     private String getDescription(Element element) {
         return element.getElementsByClass("as-productdescription").text();
     }
+
+    private String getSrc(Element element) {
+        return element.getElementsByClass("as-links-name more").attr("href");
+    }
 }
