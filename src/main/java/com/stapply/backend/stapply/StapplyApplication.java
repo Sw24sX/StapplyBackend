@@ -16,16 +16,6 @@ public class StapplyApplication extends WebMvcConfigurerAdapter implements WebMv
         SpringApplication.run(StapplyApplication.class, args);
     }
 
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**");
-//    }
-//
-//    @Override
-//    public void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests().antMatchers("/**").permitAll();
-//    }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
