@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -27,11 +28,10 @@ public class SearchController {
     }
 
     @GetMapping("/{query}")
-    public ResponseEntity<Stream<SearchApp>> search(@PathVariable(name = "query")String query) {
-        Stream<SearchApp> result;
+    public ResponseEntity<Object[]> search(@PathVariable(name = "query")String query) {
+        Object[] result;
         try {
             final var googlePlayApps = googlePlayScraper.search(query);
-            final var appStoreApps = appStoreScraper.search(query);
             AtomicInteger id = new AtomicInteger(0);
             result = googlePlayApps.stream().map(x -> {
                 var app = new SearchApp();
@@ -39,15 +39,27 @@ public class SearchController {
                 app.setAvatarSrc(x.imageSrc);
                 var developer = x.otherParameters.get("developer");
                 app.setDeveloper(developer);
-                var srcGoogle = String.format("https://play.google.com/store/apps/details?id=%s&hl=ru&gl=US",
-                        x.id);
+                var srcGoogle = String.format("https://play.google.com/store/apps/details?id=%s&hl=ru&gl=US", x.id);
                 app.setLinkGooglePlay(srcGoogle);
                 app.setId(id.addAndGet(1));
                 return app;
-            });
+            }).toArray();
+
+
         } catch (IOException | URISyntaxException exception) {
             return new ResponseEntity<>(HttpStatus.resolve(500));
         }
+
+        try {
+            final var appStoreApps = appStoreScraper.search(query);
+//            for (var app : appStoreApps) {
+//                for(var appGooglePlay : result)
+//                    ;
+//            }
+        } catch (IOException | URISyntaxException exception) {
+            return new ResponseEntity<>(HttpStatus.resolve(500));
+        }
+
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

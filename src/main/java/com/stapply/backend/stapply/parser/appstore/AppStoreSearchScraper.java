@@ -35,6 +35,8 @@ public class AppStoreSearchScraper extends StoreSearchScraper {
         var doc = Jsoup.parse(responseHTML);
         var appElements = doc.getElementsByClass("as-explore-curated");
         var result = new ArrayList<SearchAppImplInfo>();
+        if(appElements.first() == null)
+            return result;
         for(var element : appElements.first().children()) {
             var imageSrc = getImage(element);
             var name = getName(element);
