@@ -63,11 +63,13 @@ public class SearchController {
                 var mostAccuracy = Integer.MAX_VALUE;
                 SearchApp appMostAccuracy = null;
                 for(var gp : result){
-                    var appGooglePlay = (SearchApp)gp;
-                    var distance = appGooglePlay.calculate(app.name);
+                    if(gp.getLinkAppStore() != null)
+                        continue;
+
+                    var distance = gp.calculate(app.name);
                     if(distance <= acc && distance < mostAccuracy) {
                         mostAccuracy = distance;
-                        appMostAccuracy = appGooglePlay;
+                        appMostAccuracy = gp;
                     }
                 }
                 var appStoreSrc = "https://apps.apple.com/ru/app/" + app.id;
