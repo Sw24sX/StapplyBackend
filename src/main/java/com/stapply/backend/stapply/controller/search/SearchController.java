@@ -36,6 +36,7 @@ public class SearchController {
     }
 
     @PostMapping("")
+    @ApiOperation(value = "Add user's app by link")
     public ResponseEntity<?> addApp(@RequestBody AddApp requestBody) {
         if(!AddApp.isValid(requestBody))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
