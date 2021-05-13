@@ -36,7 +36,7 @@ public class AppMain {
     @ElementCollection
     private List<String> imageSrcList;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "DESCRIPTION", length = 1500)
     private String description;
 
     @Column(name = "SCORE_GOOGLE_PLAY")

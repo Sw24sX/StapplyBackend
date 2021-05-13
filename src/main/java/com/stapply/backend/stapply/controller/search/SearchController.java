@@ -36,15 +36,15 @@ public class SearchController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addApp(@RequestBody AddApp app) {
-        if(!AddApp.isValid(app))
+    public ResponseEntity<?> addApp(@RequestBody AddApp requestBody) {
+        if(!AddApp.isValid(requestBody))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         var appMain = new AppMain();
-        if(app.getGooglePlayAppLink() != null) {
+        if(requestBody.getGooglePlayAppLink() != null) {
             HashMap<String, String> parsedGooglePlayUrls;
             try {
-                parsedGooglePlayUrls = parseGooglePlayUrl(app.getGooglePlayAppLink());
+                parsedGooglePlayUrls = parseGooglePlayUrl(requestBody.getGooglePlayAppLink());
             } catch (Exception e) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -61,22 +61,46 @@ public class SearchController {
 
             appMain.setImageSrcList(googlePlayDetailedApp.images);
             appMain.setDeveloper(googlePlayDetailedApp.developer);
-            appMain.setName(app.getName());
+            appMain.setName(requestBody.getName());
             appMain.setAvatarSrc(googlePlayDetailedApp.imageSrc);
-            appMain.setGooglePlaySrc(app.getGooglePlayAppLink());
+            appMain.setGooglePlaySrc(requestBody.getGooglePlayAppLink());
             appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
+            //var lengthDescription = Math.min(googlePlayDetailedApp.description.length(), 1500);
+            //appMain.setDescription(googlePlayDetailedApp.description.substring(0, lengthDescription));
+        }
+
+        if(requestBody.getAppStoreAppLik() != null) {
+            var id = "";
+            try {
+                id = getIdFromAppStoreUrl(requestBody.getAppStoreAppLik());
+            } catch (Exception e) {
+                new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            var appStoreFullApp = new FullAppImplInfo();
+            try {
+                appStoreFullApp = appStoreScraper.detailed(id);
+            } catch (ParseException | IOException | URISyntaxException e) {
+                new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            appMain.setScoreAppStore(appStoreFullApp.score);
+            appMain.setAppStoreSrc(requestBody.getAppStoreAppLik());
+            if(appMain.getName() == null)
+                appMain.setName(appStoreFullApp.name);
+            if(appMain.getAvatarSrc() == null)
+                appMain.setAvatarSrc(appStoreFullApp.imageSrc);
+            if(appMain.getDeveloper() == null)
+                appMain.setDeveloper(appStoreFullApp.developer);
+            //if(appMain.getDescription() == null)
+            //    appMain.setDescription(appStoreFullApp.description);
+            if(appMain.getImageSrcList().isEmpty())
+                appMain.setImageSrcList(appStoreFullApp.images);
         }
 
         appService.create(appMain);
 
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    private boolean googlePlayUrlIsValid(HashMap<String, String> url) {
-        var example = "https://play.google.com/store/apps/details";
-        var validId = url.containsKey("id") && url.containsKey("base");
-        var validBase = url.get("base").equals(example);
-        return validBase && validId;
+        return new ResponseEntity<>(appMain, HttpStatus.OK);
     }
 
     private HashMap<String, String> parseGooglePlayUrl(String url) throws Exception {
@@ -93,6 +117,24 @@ public class SearchController {
             result.put(nameAndValue[0], nameAndValue[1]);
         }
         return result;
+    }
+
+    private boolean googlePlayUrlIsValid(HashMap<String, String> url) {
+        var example = "https://play.google.com/store/apps/details";
+        var validId = url.containsKey("id") && url.containsKey("base");
+        var validBase = url.get("base").equals(example);
+        return validBase && validId;
+    }
+
+    private String getIdFromAppStoreUrl(String url) throws Exception {
+        var splitUrl = url.split("/");
+        if(splitUrl.length < 1)
+            throw new Exception();
+
+        var id = splitUrl[splitUrl.length - 1];
+        if(!id.startsWith("id"))
+            throw new Exception();
+        return id;
     }
 
     @GetMapping("/{query}")
