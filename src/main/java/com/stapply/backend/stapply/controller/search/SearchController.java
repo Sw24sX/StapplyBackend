@@ -36,8 +36,7 @@ public class SearchController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addApp(@RequestBody AppMain appt) {
-        var app = new AddApp();
+    public ResponseEntity<?> addApp(@RequestBody AddApp app) {
         if(!AddApp.isValid(app))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -62,7 +61,7 @@ public class SearchController {
 
             appMain.setImageSrcList(googlePlayDetailedApp.images);
             appMain.setDeveloper(googlePlayDetailedApp.developer);
-            appMain.setName(googlePlayDetailedApp.name);
+            appMain.setName(app.getName());
             appMain.setAvatarSrc(googlePlayDetailedApp.imageSrc);
             appMain.setGooglePlaySrc(app.getGooglePlayAppLink());
             appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
@@ -75,7 +74,9 @@ public class SearchController {
 
     private boolean googlePlayUrlIsValid(HashMap<String, String> url) {
         var example = "https://play.google.com/store/apps/details";
-        return url.containsKey("id") && url.containsKey("base") && !url.get("base").equals(example);
+        var validId = url.containsKey("id") && url.containsKey("base");
+        var validBase = url.get("base").equals(example);
+        return validBase && validId;
     }
 
     private HashMap<String, String> parseGooglePlayUrl(String url) throws Exception {
