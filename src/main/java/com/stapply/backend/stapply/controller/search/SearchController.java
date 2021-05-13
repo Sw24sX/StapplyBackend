@@ -35,8 +35,17 @@ public class SearchController {
         this.appService = appService;
     }
 
+    @ApiOperation(value = "Delete app by id")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAppMain(@PathVariable(name = "id")Long id) {
+        final var result = appService.delete(id);
+        return result ?
+                new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping("")
-    @ApiOperation(value = "Add user's app by link")
+    @ApiOperation(value = "Add app")
     public ResponseEntity<?> addApp(@RequestBody AddApp requestBody) {
         if(!AddApp.isValid(requestBody))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
