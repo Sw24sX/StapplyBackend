@@ -32,6 +32,10 @@ public class StoreScraper {
         return detailedScraper.getDetailedInfo(appImpl);
     }
 
+    public FullAppImplInfo detailed (String id) throws ParseException, IOException, URISyntaxException {
+        return detailedScraper.getDetailedInfo(id);
+    }
+
     public List<Review> reviews (AppImpl appImpl, Integer count) throws InterruptedException, IOException, URISyntaxException {
         return reviewScraper.getComments(appImpl, 0);
     }

@@ -21,19 +21,23 @@ public abstract class StoreDetailedScraper {
         httpClient = HttpClients.createDefault();
     }
 
-    public final FullAppImplInfo getDetailedInfo(AppImpl appImpl) throws URISyntaxException, IOException, ParseException {
-        var builder = new URIBuilder(buildDetailedInfoUrl(appImpl));
-        setQueryDetailedInfoParameters(builder, appImpl);
+    public final FullAppImplInfo getDetailedInfo(String addId) throws URISyntaxException, IOException, ParseException {
+        var builder = new URIBuilder(buildDetailedInfoUrl(addId));
+        setQueryDetailedInfoParameters(builder, addId);
 
         var response = httpClient.execute(new HttpGet(builder.build()));
         var entity = response.getEntity();
-        return parseDetailInfoRequest(EntityUtils.toString(entity), appImpl);
+        return parseDetailInfoRequest(EntityUtils.toString(entity), addId);
     }
 
-    public String buildDetailedInfoUrl(AppImpl appImpl) {
+    public final FullAppImplInfo getDetailedInfo(AppImpl appImpl) throws URISyntaxException, IOException, ParseException {
+        return getDetailedInfo(appImpl.id);
+    }
+
+    public String buildDetailedInfoUrl(String appId) {
         return appDetailBaseUrl;
     }
 
-    public abstract void setQueryDetailedInfoParameters(URIBuilder builder, AppImpl appImpl);
-    public abstract FullAppImplInfo parseDetailInfoRequest(String responseHTML, AppImpl appImpl) throws ParseException;
+    public abstract void setQueryDetailedInfoParameters(URIBuilder builder, String appId);
+    public abstract FullAppImplInfo parseDetailInfoRequest(String responseHTML, String appId) throws ParseException;
 }

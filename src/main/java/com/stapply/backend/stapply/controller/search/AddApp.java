@@ -37,4 +37,9 @@ public class AddApp {
     public void setAppGalleryAppLink(String appGalleryAppLink) {
         this.appGalleryAppLink = appGalleryAppLink;
     }
+
+    public static boolean isValid(AddApp app) {
+        return (app.googlePlayAppLink != null || app.appGalleryAppLink != null
+                || app.appStoreAppLik != null) && app.name != null;
+    }
 }

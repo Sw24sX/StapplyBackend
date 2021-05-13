@@ -16,27 +16,41 @@ public class AppStoreDetailedInfoScraper extends StoreDetailedScraper {
         super(appDetailBaseUrl);
     }
 
-    public AppStoreDetailedInfoScraper() {
-        super("https://apps.apple.com/ru/app/");
-    }
+    @Override
+    public void setQueryDetailedInfoParameters(URIBuilder builder, String appId) {
 
-    public String buildDetailedInfoUrl(AppImpl appImpl) {
-        return appDetailBaseUrl + appImpl.id;
     }
 
     @Override
-    public void setQueryDetailedInfoParameters(URIBuilder builder, AppImpl appImpl) {
-    }
-
-    @Override
-    public FullAppImplInfo parseDetailInfoRequest(String responseHTML, AppImpl appImpl) throws ParseException {
+    public FullAppImplInfo parseDetailInfoRequest(String responseHTML, String appId) throws ParseException {
         var document = Jsoup.parse(responseHTML);
         var description = getDescription(document);
         var score = getScore(document);
         var images = getImages(document);
         var developer = getDeveloper(document);
-        var result = new FullAppImplInfo(appImpl, developer, score, description, images);
-        return result;
+        var name = getName(document);
+        var imageLogo = getImageLogoSrc(document);
+        return new FullAppImplInfo(appId, name, imageLogo, developer, score, description, images);
+    }
+
+    public AppStoreDetailedInfoScraper() {
+        super("https://apps.apple.com/ru/app/");
+    }
+
+    public String buildDetailedInfoUrl(String appId) {
+        return appDetailBaseUrl + appId;
+    }
+
+    private String getImageLogoSrc(Document doc) {
+        return doc.getElementsByClass("we-artwork__source")
+                .first()
+                .attr("srcset");
+    }
+
+    private String getName(Document doc) {
+        return doc.getElementsByClass("product-header__title app-header__title")
+                .first()
+                .text();
     }
 
     private String getDeveloper(Document doc) {

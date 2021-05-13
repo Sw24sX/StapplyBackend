@@ -11,9 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "APPMAIN")
 public class AppMain {
-
-
-
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,9 +39,17 @@ public class AppMain {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "SCORE")
+    @Column(name = "SCORE_GOOGLE_PLAY")
     @Value("0.0")
-    private Double score;
+    private Double scoreGooglePlay;
+
+    @Column(name = "SCORE_APP_STORE")
+    @Value("0.0")
+    private Double scoreAppStore;
+
+    @Column(name = "SCORE_APP_GALLERY")
+    @Value("0.0")
+    private Double scoreAppGallery;
 
     public List<String> getImageSrcList() {
         return imageSrcList;
@@ -62,12 +67,28 @@ public class AppMain {
         this.description = description;
     }
 
-    public double getScore() {
-        return score;
+    public Double getScoreGooglePlay() {
+        return scoreGooglePlay;
     }
 
-    public void setScore(double score) {
-        this.score = score;
+    public void setScoreGooglePlay(Double scoreGooglePlay) {
+        this.scoreGooglePlay = scoreGooglePlay;
+    }
+
+    public Double getScoreAppStore() {
+        return scoreAppStore;
+    }
+
+    public void setScoreAppStore(Double scoreAppStore) {
+        this.scoreAppStore = scoreAppStore;
+    }
+
+    public Double getScoreAppGallery() {
+        return scoreAppGallery;
+    }
+
+    public void setScoreAppGallery(Double scoreAppGallery) {
+        this.scoreAppGallery = scoreAppGallery;
     }
 
     public String getAppStoreSrc() {

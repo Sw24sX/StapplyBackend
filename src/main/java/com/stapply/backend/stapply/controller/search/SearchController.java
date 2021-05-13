@@ -1,7 +1,9 @@
 package com.stapply.backend.stapply.controller.search;
 
+import com.stapply.backend.stapply.models.AppMain;
 import com.stapply.backend.stapply.parser.mainscraper.ScraperFabric;
 import com.stapply.backend.stapply.parser.scraper.StoreScraper;
+import com.stapply.backend.stapply.parser.scraper.detailed.FullAppImplInfo;
 import com.stapply.backend.stapply.parser.scraper.search.SearchAppImplInfo;
 import com.stapply.backend.stapply.service.AppMainService;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -31,21 +35,75 @@ public class SearchController {
         this.appService = appService;
     }
 
-//    @PostMapping
-//    public ResponseEntity<List<SearchApp>> addApp(@RequestBody AddApp app) {
-//        //todo validate links
-//
-//    }
+    @PostMapping("")
+    public ResponseEntity<?> addApp(@RequestBody AppMain appt) {
+        var app = new AddApp();
+        if(!AddApp.isValid(app))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        var appMain = new AppMain();
+        if(app.getGooglePlayAppLink() != null) {
+            HashMap<String, String> parsedGooglePlayUrls;
+            try {
+                parsedGooglePlayUrls = parseGooglePlayUrl(app.getGooglePlayAppLink());
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            if(!googlePlayUrlIsValid(parsedGooglePlayUrls))
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+            var googlePlayDetailedApp = new FullAppImplInfo();
+            try {
+                googlePlayDetailedApp = googlePlayScraper.detailed(parsedGooglePlayUrls.get("id"));
+            } catch (ParseException | IOException | URISyntaxException e) {
+                new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            appMain.setImageSrcList(googlePlayDetailedApp.images);
+            appMain.setDeveloper(googlePlayDetailedApp.developer);
+            appMain.setName(googlePlayDetailedApp.name);
+            appMain.setAvatarSrc(googlePlayDetailedApp.imageSrc);
+            appMain.setGooglePlaySrc(app.getGooglePlayAppLink());
+            appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
+        }
+
+        appService.create(appMain);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private boolean googlePlayUrlIsValid(HashMap<String, String> url) {
+        var example = "https://play.google.com/store/apps/details";
+        return url.containsKey("id") && url.containsKey("base") && !url.get("base").equals(example);
+    }
+
+    private HashMap<String, String> parseGooglePlayUrl(String url) throws Exception {
+        var result = new HashMap<String, String>();
+        var baseAndParams = url.split("\\?");
+        if(baseAndParams.length != 2)
+            throw new Exception();
+        result.put("base", baseAndParams[0]);
+        var params = baseAndParams[1].split("&");
+        for(var param : params) {
+            var nameAndValue = param.split("=");
+            if(nameAndValue.length != 2)
+                throw new Exception();
+            result.put(nameAndValue[0], nameAndValue[1]);
+        }
+        return result;
+    }
 
     @GetMapping("/{query}")
     @ApiOperation(value = "Search on Google play and AppStore. Uses the Levenshtein distance")
     public ResponseEntity<List<SearchApp>> search(
             @PathVariable(name = "query")
             @ApiParam(value = "User's search query")
-                    String query,
+            String query,
+
             @RequestParam(defaultValue = "3")
             @ApiParam(value = "Length differences in app names", format = "integer")
-                    String accuracy) {
+            String accuracy) {
         int acc;
         try {
             acc = Integer.parseInt(accuracy);
