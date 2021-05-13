@@ -168,10 +168,8 @@ public class SearchController {
                 list.add(searchApp);
             }
             result = list;
-
-
         } catch (IOException | URISyntaxException exception) {
-            return new ResponseEntity<>(HttpStatus.resolve(500));
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         try {
@@ -203,7 +201,7 @@ public class SearchController {
                 }
             }
         } catch (IOException | URISyntaxException exception) {
-            return new ResponseEntity<>(HttpStatus.resolve(500));
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(result, HttpStatus.OK);
