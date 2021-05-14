@@ -39,6 +39,14 @@ public class AppMainServiceImpl implements AppMainService{
     }
 
     @Override
+    public boolean existByMarketId(String googlePlayId, String appStoreId, String appGalleryId) {
+        googlePlayId = googlePlayId == null ? "" : googlePlayId;
+        appStoreId = appStoreId == null ? "" : appStoreId;
+        appGalleryId = appGalleryId == null ? "" : appGalleryId;
+        return appRepository.existsByGooglePlayIdOrAppStoreIdOrAppGalleryId(googlePlayId, appStoreId, appGalleryId);
+    }
+
+    @Override
     public boolean update(Long id, AppMain app) {
         if(!appRepository.existsById(id))
             return false;

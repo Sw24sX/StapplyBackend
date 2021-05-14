@@ -1,6 +1,7 @@
 package com.stapply.backend.stapply.controller.search;
 
 import com.stapply.backend.stapply.models.AppMain;
+import com.stapply.backend.stapply.parser.UserUrlParser;
 import com.stapply.backend.stapply.parser.mainscraper.ScraperFabric;
 import com.stapply.backend.stapply.parser.scraper.StoreScraper;
 import com.stapply.backend.stapply.parser.scraper.detailed.FullAppImplInfo;
@@ -19,6 +20,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 @RequestMapping("/api/search")
@@ -43,116 +46,6 @@ public class SearchController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("")
-    @ApiOperation(value = "Add app")
-    public ResponseEntity<?> addApp(@RequestBody AddApp requestBody) {
-        if(!AddApp.isValid(requestBody))
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-        var appMain = new AppMain();
-        if(requestBody.getGooglePlayAppLink() != null) {
-            HashMap<String, String> parsedGooglePlayUrls;
-            try {
-                parsedGooglePlayUrls = parseGooglePlayUrl(requestBody.getGooglePlayAppLink());
-            } catch (Exception e) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            if(!googlePlayUrlIsValid(parsedGooglePlayUrls))
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-            var googlePlayDetailedApp = new FullAppImplInfo();
-            try {
-                googlePlayDetailedApp = googlePlayScraper.detailed(parsedGooglePlayUrls.get("id"));
-            } catch (ParseException | IOException | URISyntaxException e) {
-                new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            appMain.setImageSrcList(googlePlayDetailedApp.images);
-            appMain.setDeveloper(googlePlayDetailedApp.developer);
-            appMain.setName(requestBody.getName());
-            appMain.setAvatarSrc(googlePlayDetailedApp.imageSrc);
-            appMain.setGooglePlayId(parsedGooglePlayUrls.get("id"));
-            appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
-            appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
-            //var lengthDescription = Math.min(googlePlayDetailedApp.description.length(), 1500);
-            //appMain.setDescription(googlePlayDetailedApp.description.substring(0, lengthDescription));
-        }
-
-        if(requestBody.getAppStoreAppLik() != null) {
-            var id = "";
-            try {
-                id = getIdFromAppStoreUrl(requestBody.getAppStoreAppLik());
-            } catch (Exception e) {
-                new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            var appStoreFullApp = new FullAppImplInfo();
-            try {
-                appStoreFullApp = appStoreScraper.detailed(id);
-            } catch (ParseException | IOException | URISyntaxException e) {
-                new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            appMain.setScoreAppStore(appStoreFullApp.score);
-            appMain.setAppStoreId(id);
-            if(appMain.getName() == null)
-                appMain.setName(appStoreFullApp.name);
-            if(appMain.getAvatarSrc() == null)
-                appMain.setAvatarSrc(appStoreFullApp.imageSrc);
-            if(appMain.getDeveloper() == null)
-                appMain.setDeveloper(appStoreFullApp.developer);
-            //if(appMain.getDescription() == null)
-            //    appMain.setDescription(appStoreFullApp.description);
-            if(appMain.getImageSrcList().isEmpty())
-                appMain.setImageSrcList(appStoreFullApp.images);
-        }
-
-        appService.create(appMain);
-
-        return new ResponseEntity<>(new AppId(appMain.getId()), HttpStatus.OK);
-    }
-
-    private HashMap<String, String> parseGooglePlayUrl(String url) throws Exception {
-        var result = new HashMap<String, String>();
-        var baseAndParams = url.split("\\?");
-        if(baseAndParams.length != 2)
-            throw new Exception();
-        result.put("base", baseAndParams[0]);
-        var params = baseAndParams[1].split("&");
-        for(var param : params) {
-            var nameAndValue = param.split("=");
-            if(nameAndValue.length != 2)
-                throw new Exception();
-            result.put(nameAndValue[0], nameAndValue[1]);
-        }
-        return result;
-    }
-
-    private boolean googlePlayUrlIsValid(HashMap<String, String> url) {
-        var example = "https://play.google.com/store/apps/details";
-        var validId = url.containsKey("id") && url.containsKey("base");
-        var validBase = url.get("base").equals(example);
-        return validBase && validId;
-    }
-
-    private String getIdFromAppStoreUrl(String url) throws Exception {
-        var splitUrl = url.split("/");
-        if(splitUrl.length < 1)
-            throw new Exception();
-
-        var id = splitUrl[splitUrl.length - 1];
-        if(!id.startsWith("id"))
-            throw new Exception();
-        return id;
-    }
-
-    @GetMapping("/check/test")
-    public ResponseEntity<?> check(@RequestBody AddApp app) {
-        var abbInDb = appService.existByGooglePlayId(app.getGooglePlayAppLink());
-        return new ResponseEntity<>(abbInDb, HttpStatus.OK);
-    }
-
     @GetMapping("/{query}")
     @ApiOperation(value = "Search on Google play and AppStore. Uses the Levenshtein distance")
     public ResponseEntity<List<SearchApp>> search(
@@ -171,7 +64,7 @@ public class SearchController {
         {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
+        var id = new AtomicLong(0);
         List<SearchApp> result;
         try {
             final var googlePlayApps = googlePlayScraper.search(query);
@@ -179,12 +72,11 @@ public class SearchController {
             long limit = 10;
             for (SearchAppImplInfo x : googlePlayApps) {
                 SearchApp searchApp = SearchApp.fromGoogleApp(x, null);
+                searchApp.setId(id.addAndGet(1));
                 if (limit-- == 0) break;
-                var parsedUrl = parseGooglePlayUrl(searchApp.getLinkGooglePlay());
-                var appInDb = appService.findByMarketId(parsedUrl.get("id"), "", "");
-                if (appInDb != null){
+                var parsedUrl = UserUrlParser.parseGooglePlayUrl(searchApp.getLinkGooglePlay());
+                if (appService.existByMarketId(parsedUrl.get("id"), "", "")){
                     searchApp.setTracking(true);
-                    searchApp.setId(appInDb.getId());
                 }
                 list.add(searchApp);
             }
@@ -214,12 +106,10 @@ public class SearchController {
                     asApp.setLinkAppStore(appStoreSrc);
                     asApp.setName(app.name);
                     asApp.setAvatarSrc(app.imageSrc);
-                    var appInDb = appService.findByMarketId("", app.id, "");
-                    if(appInDb != null) {
-                        asApp.setId(appInDb.getId());
+                    if(appService.existByMarketId("", app.id, "")) {
                         asApp.setTracking(true);
                     }
-
+                    asApp.setId(id.addAndGet(1));
                     result.add(asApp);
                 }
                 else {

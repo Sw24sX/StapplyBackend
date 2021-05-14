@@ -8,6 +8,7 @@ public interface AppMainService {
     List<AppMain> findAll();
     AppMain findById(Long id);
     AppMain findByMarketId(String googlePlayId, String appStoreId, String appGalleryId);
+    boolean existByMarketId(String googlePlayId, String appStoreId, String appGalleryId);
     boolean update(Long id, AppMain app);
     boolean delete(Long id);
     void create(AppMain app);
