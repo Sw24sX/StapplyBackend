@@ -23,7 +23,8 @@ public class AppMain {
     @Column(name = "DEVELOPER")
     private String developer;
 
-    @Column(name = "AVATAR_SRC")
+    @Column(name = "AVATAR_SRC", length = 500)
+    @Lob
     private String avatarSrc;
 
     @Column(name = "GOOGLE_PLAY_ID")
@@ -35,9 +36,9 @@ public class AppMain {
     @Column(name = "APP_GALLERY_ID")
     private String appGalleryId;
 
-    @Column(name = "IMG_SRC_LIST")
+    @Column(name = "IMG_SRC_LIST", length = 500)
     @ElementCollection
-    private List<String> imageSrcList;
+    private List<String> imageSrcList = new ArrayList<>();
 
     @Column(name = "DESCRIPTION", length = 1500)
     private String description;

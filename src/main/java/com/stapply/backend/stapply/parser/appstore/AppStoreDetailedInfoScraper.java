@@ -24,7 +24,8 @@ public class AppStoreDetailedInfoScraper extends StoreDetailedScraper {
     @Override
     public FullAppImplInfo parseDetailInfoRequest(String responseHTML, String appId) throws ParseException {
         var document = Jsoup.parse(responseHTML);
-        var description = getDescription(document);
+        //var description = getDescription(document); //todo
+        var description = "";
         var score = getScore(document);
         var images = getImages(document);
         var developer = getDeveloper(document);

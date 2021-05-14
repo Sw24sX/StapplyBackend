@@ -137,7 +137,7 @@ public class AppMainController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         var appMain = new AppMain();
-        if(requestBody.getGooglePlayAppLink() != null) {
+        if(requestBody.getGooglePlayAppLink() != null && !requestBody.getGooglePlayAppLink().isEmpty()) {
             HashMap<String, String> parsedGooglePlayUrls;
             try {
                 parsedGooglePlayUrls = UserUrlParser.parseGooglePlayUrl(requestBody.getGooglePlayAppLink());
@@ -162,7 +162,7 @@ public class AppMainController {
             appMain.setGooglePlayId(parsedGooglePlayUrls.get("id"));
             appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
             appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
-            //var lengthDescription = Math.min(googlePlayDetailedApp.description.length(), 1500);
+            //var lengthDescription = Math.min(googlePlayDeta   iledApp.description.length(), 1500);
             //appMain.setDescription(googlePlayDetailedApp.description.substring(0, lengthDescription));
         }
 
