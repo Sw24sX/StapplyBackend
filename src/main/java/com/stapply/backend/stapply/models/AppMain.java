@@ -26,11 +26,14 @@ public class AppMain {
     @Column(name = "AVATAR_SRC")
     private String avatarSrc;
 
-    @Column(name = "GOOGLE_PLAY_SPC")
-    private String googlePlaySrc;
+    @Column(name = "GOOGLE_PLAY_ID")
+    private String googlePlayId;
 
-    @Column(name = "APP_STORE_SRC")
-    private String appStoreSrc;
+    @Column(name = "APP_STORE_ID")
+    private String appStoreId;
+
+    @Column(name = "APP_GALLERY_ID")
+    private String appGalleryId;
 
     @Column(name = "IMG_SRC_LIST")
     @ElementCollection
@@ -91,22 +94,6 @@ public class AppMain {
         this.scoreAppGallery = scoreAppGallery;
     }
 
-    public String getAppStoreSrc() {
-        return appStoreSrc;
-    }
-
-    public void setAppStoreSrc(String appStoreSrc) {
-        this.appStoreSrc = appStoreSrc;
-    }
-
-    public String getGooglePlaySrc() {
-        return googlePlaySrc;
-    }
-
-    public void setGooglePlaySrc(String googlePlaySrc) {
-        this.googlePlaySrc = googlePlaySrc;
-    }
-
     public Long getId() {
         return id;
     }
@@ -137,5 +124,21 @@ public class AppMain {
 
     public void setAvatarSrc(String avatarSrc) {
         this.avatarSrc = avatarSrc;
+    }
+
+    public String getGooglePlayId() {
+        return googlePlayId;
+    }
+
+    public void setGooglePlayId(String googlePlayId) {
+        this.googlePlayId = googlePlayId;
+    }
+
+    public String getAppStoreId() {
+        return appStoreId;
+    }
+
+    public void setAppStoreId(String appStoreId) {
+        this.appStoreId = appStoreId;
     }
 }

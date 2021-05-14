@@ -29,6 +29,16 @@ public class AppMainServiceImpl implements AppMainService{
     }
 
     @Override
+    public AppMain findByMarketId(String googlePlayId, String appStoreId, String appGalleryId) {
+        googlePlayId = googlePlayId == null ? "" : googlePlayId;
+        appStoreId = appStoreId == null ? "" : appStoreId;
+        appGalleryId = appGalleryId == null ? "" : appGalleryId;
+        if(!appRepository.existsByGooglePlayIdOrAppStoreIdOrAppGalleryId(googlePlayId, appStoreId, appGalleryId))
+            return null;
+        return appRepository.findByGooglePlayIdOrAppStoreIdOrAppGalleryId(googlePlayId, appStoreId, appGalleryId);
+    }
+
+    @Override
     public boolean update(Long id, AppMain app) {
         if(!appRepository.existsById(id))
             return false;
@@ -48,5 +58,15 @@ public class AppMainServiceImpl implements AppMainService{
     @Override
     public void create(AppMain app) {
         appRepository.save(app);
+    }
+
+    @Override
+    public AppMain findByGooglePlayId(String googlePlayId) {
+        return appRepository.findByGooglePlayId(googlePlayId);
+    }
+
+    @Override
+    public boolean existByGooglePlayId(String googlePlayId) {
+        return appRepository.existsByGooglePlayId(googlePlayId);
     }
 }

@@ -19,7 +19,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/api/search")
@@ -73,7 +72,8 @@ public class SearchController {
             appMain.setDeveloper(googlePlayDetailedApp.developer);
             appMain.setName(requestBody.getName());
             appMain.setAvatarSrc(googlePlayDetailedApp.imageSrc);
-            appMain.setGooglePlaySrc(requestBody.getGooglePlayAppLink());
+            appMain.setGooglePlayId(parsedGooglePlayUrls.get("id"));
+            appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
             appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
             //var lengthDescription = Math.min(googlePlayDetailedApp.description.length(), 1500);
             //appMain.setDescription(googlePlayDetailedApp.description.substring(0, lengthDescription));
@@ -95,7 +95,7 @@ public class SearchController {
             }
 
             appMain.setScoreAppStore(appStoreFullApp.score);
-            appMain.setAppStoreSrc(requestBody.getAppStoreAppLik());
+            appMain.setAppStoreId(id);
             if(appMain.getName() == null)
                 appMain.setName(appStoreFullApp.name);
             if(appMain.getAvatarSrc() == null)
@@ -110,7 +110,7 @@ public class SearchController {
 
         appService.create(appMain);
 
-        return new ResponseEntity<>(appMain, HttpStatus.OK);
+        return new ResponseEntity<>(new AppId(appMain.getId()), HttpStatus.OK);
     }
 
     private HashMap<String, String> parseGooglePlayUrl(String url) throws Exception {
@@ -147,6 +147,12 @@ public class SearchController {
         return id;
     }
 
+    @GetMapping("/check/test")
+    public ResponseEntity<?> check(@RequestBody AddApp app) {
+        var abbInDb = appService.existByGooglePlayId(app.getGooglePlayAppLink());
+        return new ResponseEntity<>(abbInDb, HttpStatus.OK);
+    }
+
     @GetMapping("/{query}")
     @ApiOperation(value = "Search on Google play and AppStore. Uses the Levenshtein distance")
     public ResponseEntity<List<SearchApp>> search(
@@ -166,19 +172,24 @@ public class SearchController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        AtomicInteger id = new AtomicInteger(0);
         List<SearchApp> result;
         try {
             final var googlePlayApps = googlePlayScraper.search(query);
             List<SearchApp> list = new ArrayList<>();
             long limit = 10;
             for (SearchAppImplInfo x : googlePlayApps) {
-                SearchApp searchApp = SearchApp.fromGoogleApp(x, id.addAndGet(1));
+                SearchApp searchApp = SearchApp.fromGoogleApp(x, null);
                 if (limit-- == 0) break;
+                var parsedUrl = parseGooglePlayUrl(searchApp.getLinkGooglePlay());
+                var appInDb = appService.findByMarketId(parsedUrl.get("id"), "", "");
+                if (appInDb != null){
+                    searchApp.setTracking(true);
+                    searchApp.setId(appInDb.getId());
+                }
                 list.add(searchApp);
             }
             result = list;
-        } catch (IOException | URISyntaxException exception) {
+        } catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -200,10 +211,15 @@ public class SearchController {
                 var appStoreSrc = "https://apps.apple.com/ru/app/" + app.id;
                 if(appMostAccuracy == null) {
                     var asApp = new SearchApp();
-                    asApp.setId(id.addAndGet(1));
                     asApp.setLinkAppStore(appStoreSrc);
                     asApp.setName(app.name);
                     asApp.setAvatarSrc(app.imageSrc);
+                    var appInDb = appService.findByMarketId("", app.id, "");
+                    if(appInDb != null) {
+                        asApp.setId(appInDb.getId());
+                        asApp.setTracking(true);
+                    }
+
                     result.add(asApp);
                 }
                 else {

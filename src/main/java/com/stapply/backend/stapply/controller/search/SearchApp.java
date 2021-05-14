@@ -5,7 +5,7 @@ import com.stapply.backend.stapply.parser.scraper.search.SearchAppImplInfo;
 import java.util.Arrays;
 
 public class SearchApp {
-    private Integer id;
+    private Long id;
     private String name;
     private String nameLower;
     private String developer;
@@ -13,12 +13,21 @@ public class SearchApp {
     private String linkAppStore;
     private String linkAppGallery;
     private String linkGooglePlay;
+    private boolean isTracking = false;
 
-    public Integer getId() {
+
+    public Boolean getTracking() {
+        return isTracking;
+    }
+
+    public void setTracking(boolean tracking) {
+        isTracking = tracking;
+    }
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -103,7 +112,7 @@ public class SearchApp {
                 .min().orElse(Integer.MAX_VALUE);
     }
 
-    public static SearchApp fromGoogleApp(SearchAppImplInfo gp, Integer id) {
+    public static SearchApp fromGoogleApp(SearchAppImplInfo gp, Long id) {
         var app = new SearchApp();
         app.setName(gp.name);
         app.setAvatarSrc(gp.imageSrc);
