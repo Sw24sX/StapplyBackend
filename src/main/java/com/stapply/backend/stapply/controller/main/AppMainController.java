@@ -1,7 +1,9 @@
 package com.stapply.backend.stapply.controller.main;
 
-import com.stapply.backend.stapply.controller.search.AddApp;
-import com.stapply.backend.stapply.controller.search.AppId;
+import com.stapply.backend.stapply.controller.main.output.AppMainPage;
+import com.stapply.backend.stapply.controller.main.output.AppName;
+import com.stapply.backend.stapply.controller.search.output.AddApp;
+import com.stapply.backend.stapply.controller.search.output.AppId;
 import com.stapply.backend.stapply.models.AppMain;
 import com.stapply.backend.stapply.parser.UserUrlParser;
 import com.stapply.backend.stapply.parser.mainscraper.ScraperFabric;
@@ -9,7 +11,6 @@ import com.stapply.backend.stapply.parser.scraper.StoreScraper;
 import com.stapply.backend.stapply.parser.scraper.detailed.FullAppImplInfo;
 import com.stapply.backend.stapply.service.AppMainService;
 import io.swagger.annotations.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,6 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Stream;
 
 @RestController
@@ -29,7 +29,7 @@ public class AppMainController {
     private final StoreScraper googlePlayScraper;
     private final StoreScraper appStoreScraper;
 
-    @Autowired
+    //@Autowired
     public AppMainController(AppMainService appService) {
         this.appService = appService;
         this.appStoreScraper = ScraperFabric.AppStoreScraper();
@@ -45,9 +45,10 @@ public class AppMainController {
     })
     @GetMapping
     public ResponseEntity<Stream<AppMainPage>> getAllAppsMain() {
-        final var allApps = appService.findAll();
-        if(allApps == null || allApps.isEmpty())
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        var allApps = appService.findAll();
+        if(allApps == null)
+            allApps = new ArrayList<>();
+
         final var result = allApps.stream().map(AppMainPage::new);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -55,20 +56,23 @@ public class AppMainController {
     @ApiOperation(value = "Get one app by id", response = AppMain.class)
     @GetMapping("/{id}")
     public ResponseEntity<?> getAppMain(@PathVariable(name = "id")Long id) {
-        final var result = appService.findById(id);
-        return result != null ?
-                new ResponseEntity<>(result, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        final var app = appService.findById(id);
+        if(app == null)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        var result = new AppMainPage(app);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Change app name by id")
     @PutMapping("/{id}")
-    public ResponseEntity<?> changeName(@PathVariable(name = "id")Long id, @RequestBody AppMain appWithNewName) {
+    public ResponseEntity<?> changeName(@PathVariable(name = "id")Long id, @RequestBody AppName name) {
         final var app = appService.findById(id);
         if(app == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
         //todo validate name
-        app.setName(appWithNewName.getName());
+        app.setName(name.getName());
         final var result = appService.update(id, app);
         return result ?
                 new ResponseEntity<>(HttpStatus.ACCEPTED) :
@@ -82,28 +86,6 @@ public class AppMainController {
         return result ?
                 new ResponseEntity<>(HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @ApiOperation(value = "Test custom output")
-    @GetMapping("/test/{id}")
-    public ResponseEntity<?> getTestAppMain(@PathVariable(name = "id")Long id) {
-        final var result = new AppMainPage(appService.findById(id));
-        return result != null ?
-                new ResponseEntity<>(result, HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @ApiOperation(value = "Test custom output")
-    @GetMapping("/test")
-    public ResponseEntity<?> getAllTestAppMain() {
-        final var result = appService.findAll();
-        var t = new ArrayList<String>();
-        t.add("https://play-lh.googleusercontent.com/U--y9KFmvZ-N2IPc_QuFvjt9113Mh48Qn6GtxQBYjBpNtG-lR9nTd3AFFB8PKIqkkyA=w1920-h1095-rw");
-        for (var app : result) {
-            app.setImageSrcList(t);
-            appService.update(app.getId(), app);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ApiOperation(value = "Refresh data base")

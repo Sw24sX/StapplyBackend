@@ -1,4 +1,4 @@
-package com.stapply.backend.stapply.controller.search;
+package com.stapply.backend.stapply.controller.search.output;
 
 import com.stapply.backend.stapply.parser.scraper.search.SearchAppImplInfo;
 

@@ -1,4 +1,4 @@
-package com.stapply.backend.stapply.controller.main;
+package com.stapply.backend.stapply.controller.main.output;
 
 import com.stapply.backend.stapply.models.AppMain;
 import org.springframework.beans.factory.annotation.Value;
