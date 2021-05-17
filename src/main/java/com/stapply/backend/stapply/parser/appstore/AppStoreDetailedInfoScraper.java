@@ -43,9 +43,11 @@ public class AppStoreDetailedInfoScraper extends StoreDetailedScraper {
     }
 
     private String getImageLogoSrc(Document doc) {
-        return doc.getElementsByClass("we-artwork__source")
+        var res = doc.getElementsByClass("we-artwork__source")
                 .first()
-                .attr("srcset");
+                .attr("srcset")
+                .split(" 1x");
+        return res.length > 0 ? res[0] : null;
     }
 
     private String getName(Document doc) {
@@ -75,8 +77,12 @@ public class AppStoreDetailedInfoScraper extends StoreDetailedScraper {
         var result = new ArrayList<String>();
         var screenshots = doc.getElementsByClass("l-row l-row--peek we-screenshot-viewer__screenshots-list").first();
         for(var element : screenshots.children()) {
-            var src = element.getElementsByClass("we-artwork__source").first().attr("srcset");
-            result.add(src);
+            var src = element.getElementsByClass("we-artwork__source")
+                    .first()
+                    .attr("srcset")
+                    .split(" 1x");
+            if(src.length > 0)
+                result.add(src[0]);
         }
         return result;
     }

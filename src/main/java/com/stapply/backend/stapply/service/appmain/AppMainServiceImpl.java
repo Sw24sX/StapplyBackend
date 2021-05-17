@@ -138,7 +138,7 @@ public class AppMainServiceImpl implements AppMainService{
             appMain.setScoreAppStore(appStoreFullApp.score);
             appMain.setAppStoreId(id);
             if(appMain.getName() == null)
-                appMain.setName(appStoreFullApp.name);
+                appMain.setName(app.getName());
             if(appMain.getAvatarSrc() == null)
                 appMain.setAvatarSrc(appStoreFullApp.imageSrc);
             if(appMain.getDeveloper() == null)
