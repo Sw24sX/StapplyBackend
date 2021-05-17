@@ -9,6 +9,7 @@ public interface AppRepository extends JpaRepository<AppMain, Long> {
     AppMain findByGooglePlayId(String googlePlayId);
 
     boolean existsByGooglePlayId(String googlePlayId);
+    boolean existsByAppStoreId(String appStoreId);
 
     boolean existsByGooglePlayIdOrAppStoreIdOrAppGalleryId(String googlePlayId, String appStoreId, String appGalleryId);
 

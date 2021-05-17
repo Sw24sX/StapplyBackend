@@ -1,4 +1,4 @@
-package com.stapply.backend.stapply.controller.search.output;
+package com.stapply.backend.stapply.controller.search.webmodel;
 
 public class AppId {
     public Long getId() {

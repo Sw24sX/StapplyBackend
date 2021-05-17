@@ -1,4 +1,4 @@
-package com.stapply.backend.stapply.controller.main.output;
+package com.stapply.backend.stapply.controller.main.webmodel;
 
 public class AppName {
     public String getName() {

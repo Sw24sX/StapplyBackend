@@ -1,4 +1,6 @@
-package com.stapply.backend.stapply.controller.search.output;
+package com.stapply.backend.stapply.controller.search.webmodel;
+
+import com.stapply.backend.stapply.service.appmain.servicemodels.AppLinks;
 
 public class AddApp {
     private String name;
@@ -41,5 +43,14 @@ public class AddApp {
     public static boolean isValid(AddApp app) {
         return (app.googlePlayAppLink != null || app.appGalleryAppLink != null
                 || app.appStoreAppLik != null) && app.name != null;
+    }
+
+    public static AppLinks toAppLinks(AddApp app) {
+        var res = new AppLinks();
+        res.setName(app.getName());
+        res.setAppGalleryAppLink(app.getAppGalleryAppLink());
+        res.setGooglePlayAppLink(app.getGooglePlayAppLink());
+        res.setAppStoreAppLik(app.getAppStoreAppLik());
+        return res;
     }
 }

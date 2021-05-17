@@ -1,13 +1,6 @@
-package com.stapply.backend.stapply.controller.main.output;
+package com.stapply.backend.stapply.controller.main.webmodel;
 
 import com.stapply.backend.stapply.models.AppMain;
-import org.springframework.beans.factory.annotation.Value;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.List;
 
 public class AppMainPage {
     public final Long id;

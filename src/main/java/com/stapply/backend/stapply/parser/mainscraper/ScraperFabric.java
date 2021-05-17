@@ -9,19 +9,31 @@ import com.stapply.backend.stapply.parser.googleplay.GooglePlaySearchScraper;
 import com.stapply.backend.stapply.parser.scraper.StoreScraper;
 
 public class ScraperFabric {
+    private static StoreScraper googlePlay = null;
+    private static StoreScraper appStoreScraper = null;
+
     public static StoreScraper GooglePlayScraper() {
+        if (googlePlay != null)
+            return googlePlay;
+
         var search = new GooglePlaySearchScraper();
         var detail = new GooglePlayDetailInfoScraper();
         var reviews = new GooglePlayReviewsScraper();
-
-        return new StoreScraper(search, detail, reviews);
+        var result = new StoreScraper(search, detail, reviews);
+        googlePlay = result;
+        return result;
     }
 
     public static StoreScraper AppStoreScraper() {
+        if(appStoreScraper != null)
+            return appStoreScraper;
+
         var search = new AppStoreSearchScraper();
         var detail = new AppStoreDetailedInfoScraper();
         var reviews = new AppStoreReviewScraper();
 
-        return new StoreScraper(search, detail, reviews);
+        var result = new StoreScraper(search, detail, reviews);
+        appStoreScraper = result;
+        return result;
     }
 }
