@@ -134,15 +134,11 @@ public class AppMarketSearch {
         return value == null || value.isEmpty();
     }
 
-    public void setLinkAppStore(SearchAppImplInfo appSearchData) throws Exception {
-        if(appSearchData.id == null)
-            throw new Exception();
+    public void setLinkAppStore(SearchAppImplInfo appSearchData) {
         this.linkAppStore = DefaultDetailUrl.createAppStoreUrl(appSearchData.id);
     }
 
-    public void setLinkGooglePlay(SearchAppImplInfo appSearchData) throws Exception {
-        if(appSearchData.id == null)
-            throw new Exception();
+    public void setLinkGooglePlay(SearchAppImplInfo appSearchData){
         this.linkGooglePlay = DefaultDetailUrl.createGooglePlayUrl(appSearchData.id);
     }
 

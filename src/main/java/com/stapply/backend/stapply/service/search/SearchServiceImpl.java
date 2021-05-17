@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -35,15 +36,21 @@ public class SearchServiceImpl implements SearchService{
 
     @Override
     public List<AppMarketSearch> search(String query, Integer accuracy) {
-        var id = new AtomicLong(0);
+        var result = searchInGooglePlay(query);
+        result = searchInAppStore(query, accuracy, result);
+        return result;
+    }
+
+    private List<AppMarketSearch> searchInGooglePlay(String query) {
         List<AppMarketSearch> result;
         try {
             final var googlePlayApps = googlePlayScraper.search(query);
-            List<AppMarketSearch> list = new ArrayList<>();
+            var list = new ArrayList<AppMarketSearch>();
+
             long limit = 10;
             for (var gp : googlePlayApps) {
                 var searchApp = new AppMarketSearch();
-                searchApp.putDataFromParsedSearchApp(gp, id.addAndGet(1));
+                searchApp.putDataFromParsedSearchApp(gp, 0L); //todo add id
                 searchApp.setLinkGooglePlay(gp);
 
                 if (limit-- == 0)
@@ -59,7 +66,10 @@ public class SearchServiceImpl implements SearchService{
         } catch (Exception exception) {
             return new ArrayList<>();
         }
+        return result;
+    }
 
+    private List<AppMarketSearch> searchInAppStore(String query, Integer accuracy, List<AppMarketSearch> result) {
         try {
             final var appStoreApps = appStoreScraper.search(query);
             for (var app : appStoreApps) {
@@ -75,17 +85,16 @@ public class SearchServiceImpl implements SearchService{
                         appMostAccuracy = gp;
                     }
                 }
-                var appStoreSrc = "https://apps.apple.com/ru/app/" + app.id;
                 if(appMostAccuracy == null) {
                     var asApp = new AppMarketSearch();
-                    asApp.putDataFromParsedSearchApp(app, id.addAndGet(1));
+                    asApp.putDataFromParsedSearchApp(app, 0L); //todo add id
                     if(appRepository.existsByAppStoreId(app.id)) {
                         asApp.setTracking(true);
                     }
                     result.add(asApp);
                 }
                 else {
-                    appMostAccuracy.setLinkAppStore(appStoreSrc);
+                    appMostAccuracy.setLinkAppStore(app);
                 }
             }
         } catch (IOException | URISyntaxException exception) {
