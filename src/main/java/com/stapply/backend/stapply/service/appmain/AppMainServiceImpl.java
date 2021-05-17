@@ -8,8 +8,6 @@ import com.stapply.backend.stapply.parser.scraper.detailed.FullAppImplInfo;
 import com.stapply.backend.stapply.repository.AppRepository;
 import com.stapply.backend.stapply.service.appmain.servicemodels.AppLinks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -91,64 +89,89 @@ public class AppMainServiceImpl implements AppMainService{
             return null;
 
         var appMain = new AppMain();
-        if (app.getGooglePlayAppLink() != null && !app.getGooglePlayAppLink().isEmpty()) {
-            HashMap<String, String> parsedGooglePlayUrls;
-            try {
-                parsedGooglePlayUrls = UserUrlParser.parseGooglePlayUrl(app.getGooglePlayAppLink());
-            } catch (Exception e) {
-                return null;
-            }
+        appMain.setName(app.getName());
+        var googlePlayData = getGooglePlayData(app.getGooglePlayAppLink());
+        if(googlePlayData != null)
+            fillGooglePlayData(googlePlayData, appMain);
 
-            if (!UserUrlParser.googlePlayUrlIsValid(parsedGooglePlayUrls))
-                return null;
-
-            var googlePlayDetailedApp = new FullAppImplInfo();
-            try {
-                googlePlayDetailedApp = googlePlayScraper.detailed(parsedGooglePlayUrls.get("id"));
-            } catch (ParseException | IOException | URISyntaxException e) {
-                new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            appMain.setImageSrcList(googlePlayDetailedApp.images);
-            appMain.setDeveloper(googlePlayDetailedApp.developer);
-            appMain.setName(app.getName());
-            appMain.setAvatarSrc(googlePlayDetailedApp.imageSrc);
-            appMain.setGooglePlayId(parsedGooglePlayUrls.get("id"));
-            appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
-            appMain.setScoreGooglePlay(googlePlayDetailedApp.score);
-            //var lengthDescription = Math.min(googlePlayDeta   iledApp.description.length(), 1500);
-            //appMain.setDescription(googlePlayDetailedApp.description.substring(0, lengthDescription));
-        }
-
-        if(app.getAppStoreAppLik() != null) {
-            var id = "";
-            try {
-                id = UserUrlParser.getIdFromAppStoreUrl(app.getAppStoreAppLik());
-            } catch (Exception e) {
-                new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            var appStoreFullApp = new FullAppImplInfo();
-            try {
-                appStoreFullApp = appStoreScraper.detailed(id);
-            } catch (ParseException | IOException | URISyntaxException e) {
-                new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            appMain.setScoreAppStore(appStoreFullApp.score);
-            appMain.setAppStoreId(id);
-            if(appMain.getName() == null)
-                appMain.setName(app.getName());
-            if(appMain.getAvatarSrc() == null)
-                appMain.setAvatarSrc(appStoreFullApp.imageSrc);
-            if(appMain.getDeveloper() == null)
-                appMain.setDeveloper(appStoreFullApp.developer);
-            //if(appMain.getDescription() == null)
-            //    appMain.setDescription(appStoreFullApp.description);
-            if(appMain.getImageSrcList().isEmpty())
-                appMain.setImageSrcList(appStoreFullApp.images);
-        }
+        var appStoreData = getAppStoreData(app.getAppStoreAppLik());
+        if(appStoreData != null)
+            fillAppStoreData(appStoreData, appMain);
         return create(appMain);
+    }
+
+    private FullAppImplInfo getGooglePlayData(String url) {
+        if (url == null || url.isEmpty())
+            return null;
+
+        HashMap<String, String> parsedGooglePlayUrls;
+        try {
+            parsedGooglePlayUrls = UserUrlParser.parseGooglePlayUrl(url);
+        } catch (Exception e) {
+            return null;
+        }
+
+        if (!UserUrlParser.googlePlayUrlIsValid(parsedGooglePlayUrls))
+            return null;
+
+        var googlePlayDetailedApp = new FullAppImplInfo();
+        try {
+            googlePlayDetailedApp = googlePlayScraper.detailed(parsedGooglePlayUrls.get("id"));
+        } catch (ParseException | IOException | URISyntaxException e) {
+            return null;
+        }
+        return googlePlayDetailedApp;
+    }
+
+    private void fillGooglePlayData(FullAppImplInfo googlePlay, AppMain app) {
+        putData(googlePlay, app);
+        app.setScoreGooglePlay(googlePlay.score);
+        app.setGooglePlayId(googlePlay.id);
+    }
+
+    private FullAppImplInfo getAppStoreData(String url) {
+        if(url == null || url.isEmpty())
+            return null;
+
+        var appStoreFullApp = new FullAppImplInfo();
+        try {
+            var id = UserUrlParser.getIdFromAppStoreUrl(url);
+            appStoreFullApp = appStoreScraper.detailed(id);
+        } catch (Exception e) {
+            return null;
+        }
+        return appStoreFullApp;
+    }
+
+    private void fillAppStoreData(FullAppImplInfo appStore, AppMain app) {
+        putData(appStore, app);
+        app.setScoreAppStore(appStore.score);
+        app.setAppStoreId(appStore.id);
+    }
+
+    private void putData(FullAppImplInfo app, AppMain mainApp) {
+        if(checkProperty(mainApp.getName()))
+            mainApp.setName(app.name);
+
+        if(checkProperty(mainApp.getAvatarSrc()))
+            mainApp.setAppStoreId(app.imageSrc);
+
+        if(checkProperty(mainApp.getDeveloper()))
+            mainApp.setDeveloper(app.developer);
+
+        if(checkProperty(mainApp.getDescription()))
+        {
+            var descriptionLength = app.description.length() >= 1500 ? 1499 : app.description.length();
+            var description = app.description.substring(0, descriptionLength);
+            mainApp.setDescription(description);
+        }
+
+        if(mainApp.getImageSrcList() == null || mainApp.getImageSrcList().isEmpty())
+            mainApp.setImageSrcList(app.images);
+    }
+
+    private boolean checkProperty(String value) {
+        return value == null || value.isEmpty();
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.HashMap;
 public class UserUrlParser {
     public static HashMap<String, String> parseGooglePlayUrl(String url) throws Exception {
         var result = new HashMap<String, String>();
+        result.put("url", url);
         var baseAndParams = url.split("\\?");
         if(baseAndParams.length != 2)
             throw new Exception();

@@ -19,14 +19,9 @@ import java.util.stream.Stream;
 @RequestMapping("/api/apps")
 public class AppMainController {
     private final AppMainService appService;
-    private final StoreScraper googlePlayScraper;
-    private final StoreScraper appStoreScraper;
 
-    //@Autowired
     public AppMainController(AppMainService appService) {
         this.appService = appService;
-        this.appStoreScraper = ScraperFabric.AppStoreScraper();
-        this.googlePlayScraper = ScraperFabric.GooglePlayScraper();
     }
 
     @ApiOperation(value = "Get all apps for main page", response = AppMain[].class)
