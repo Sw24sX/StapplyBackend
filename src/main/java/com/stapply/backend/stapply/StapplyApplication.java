@@ -9,17 +9,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@EnableSwagger2
-public class StapplyApplication extends WebMvcConfigurerAdapter implements WebMvcConfigurer {
-
+public class StapplyApplication {
     public static void main(String[] args) {
         SpringApplication.run(StapplyApplication.class, args);
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                //.allowedOrigins("http://localhost:4200")
-                .allowedMethods("*");
     }
 }

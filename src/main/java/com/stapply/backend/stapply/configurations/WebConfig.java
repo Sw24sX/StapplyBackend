@@ -2,10 +2,7 @@ package com.stapply.backend.stapply.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -16,40 +13,20 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static springfox.documentation.builders.PathSelectors.regex;
 
-//@Configuration
-//@EnableWebMvc
-//@EnableSwagger2
-//public class WebConfig extends WebMvcConfigurerAdapter {
-//
-//    @Bean
-//    public Docket productApi() {
-//        return new Docket(DocumentationType.SWAGGER_2)
-//                .select()
-//                .apis(RequestHandlerSelectors.basePackage("guru.springframework.controllers"))
-//                .paths(regex("/product.*"))
-//                .build()
-//                .apiInfo(metaData());
-//    }
-//    private ApiInfo metaData() {
-//        return new ApiInfoBuilder()
-//                .title("Spring Boot REST API")
-//                .description("\"Spring Boot REST API for Online Store\"")
-//                .version("1.0.0")
-//                .license("Apache License Version 2.0")
-//                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0\"")
-//                .contact(new Contact("John Thompson", "http://springframework.guru/about/", "john@springfrmework.guru"))
-//                .build();
-//    }
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("swagger-ui.html")
-//                .addResourceLocations("classpath:/META-INF/resources/");
-//        registry.addResourceHandler("/webjars/**")
-//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-//    }
-//
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**");
-//    }
-//}
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+//                .allowedOrigins("http://localhost:4200")
+                .allowedMethods("*");
+    }
+}
