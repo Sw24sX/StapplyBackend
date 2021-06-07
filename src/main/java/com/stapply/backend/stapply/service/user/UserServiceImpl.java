@@ -1,6 +1,7 @@
 package com.stapply.backend.stapply.service.user;
 
 import com.stapply.backend.stapply.models.Role;
+import com.stapply.backend.stapply.models.Status;
 import com.stapply.backend.stapply.models.User;
 import com.stapply.backend.stapply.repository.RoleRepository;
 import com.stapply.backend.stapply.repository.UserRepository;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,6 +35,10 @@ public class UserServiceImpl implements UserService{
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(userRoles);
+
+        user.setStatus(Status.ACTIVE);
+        user.setCreated(new Date());
+        user.setUpdated(new Date());
 
         var userRegistered = userRepository.save(user);
         return userRegistered;
