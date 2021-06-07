@@ -11,31 +11,24 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+
+
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static final String ADMIN_ENDPOINT = "/admin/**";
-    private static final String LOGIN_ENDPOINT = "/api/auth/**";
+    private static final String ADMIN_ENDPOINT = "/api/admin/**";
+    private static final String LOGIN_ENDPOINT = "/api/auth/login";
     private static final String SWAGGER_ENDPOINT = "/swagger-ui.html#";
 
+
     @Autowired
-    public SecurityConfig() {
-        this.jwtTokenProvider = new JwtTokenProvider();
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Bean
-    public JwtTokenProvider jwtTokenProvider() {
-        return new JwtTokenProvider();
-    }
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }

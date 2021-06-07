@@ -1,6 +1,7 @@
 package com.stapply.backend.stapply.security;
 
 import com.stapply.backend.stapply.models.User;
+import com.stapply.backend.stapply.security.jwt.JwtUser;
 import com.stapply.backend.stapply.security.jwt.JwtUserFactory;
 import com.stapply.backend.stapply.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
+
     private final UserService userService;
 
     @Autowired
@@ -20,12 +22,13 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userService.findByUserName(username);
+        User user = userService.findByUserName(username);
 
-        if(user == null) {
+        if (user == null) {
             throw new UsernameNotFoundException("User with username: " + username + " not found");
         }
-        var jwtUser = JwtUserFactory.create(user);
+
+        JwtUser jwtUser = JwtUserFactory.create(user);
         return jwtUser;
     }
 }

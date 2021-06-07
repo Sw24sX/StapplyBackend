@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JwtUserFactory {
+public final class JwtUserFactory {
+
     public JwtUserFactory() {
     }
 
@@ -29,7 +30,9 @@ public class JwtUserFactory {
     }
 
     private static List<GrantedAuthority> mapToGrantedAuthorities(List<Role> userRoles) {
-        return userRoles.stream().map(role ->
-                new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        return userRoles.stream()
+                .map(role ->
+                        new SimpleGrantedAuthority(role.getName())
+                ).collect(Collectors.toList());
     }
 }

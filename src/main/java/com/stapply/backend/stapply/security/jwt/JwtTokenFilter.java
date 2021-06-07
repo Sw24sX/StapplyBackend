@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class JwtTokenFilter extends GenericFilterBean {
+
     private JwtTokenProvider jwtTokenProvider;
 
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
@@ -20,21 +21,22 @@ public class JwtTokenFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        var token = jwtTokenProvider.resolveToken((HttpServletRequest) request);
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
+            throws IOException, ServletException {
 
-        if (token != null) {
+        String token = jwtTokenProvider.resolveToken((HttpServletRequest) req);
+        try {
+            if (token != null && jwtTokenProvider.validateToken(token)) {
+                Authentication auth = jwtTokenProvider.getAuthentication(token);
 
-            try {
-               if(jwtTokenProvider.validateToken(token)) {
-                   var auth = jwtTokenProvider.getAuthentication(token);
-
-                   if (auth != null) {
-                       SecurityContextHolder.getContext().setAuthentication(auth);
-                   }
-               }
-            } catch (JwtAuthenticationException ignored) {}
+                if (auth != null) {
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                }
+            }
+        } catch (JwtAuthenticationException e) {
+            e.printStackTrace();
         }
-        chain.doFilter(request, response);
+        filterChain.doFilter(req, res);
     }
+
 }

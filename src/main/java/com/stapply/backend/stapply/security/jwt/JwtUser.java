@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 
 public class JwtUser implements UserDetails {
+
     private final Long id;
     private final String username;
     private final String firstName;
