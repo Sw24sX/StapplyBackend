@@ -1,6 +1,6 @@
 #FileLock
-#Fri Jun 11 19:53:45 YEKT 2021
-server=192.168.8.112\:52540
+#Fri Jun 11 20:32:41 YEKT 2021
+server=192.168.8.112\:50964
 hostName=DESKTOP-H8KMTPI
 method=file
-id=179fb908558a712f6ae79ad56abb8bb7298bba061c6
+id=179fbb42b0fa5154aff68e29af6cba92cd90a6bb741
