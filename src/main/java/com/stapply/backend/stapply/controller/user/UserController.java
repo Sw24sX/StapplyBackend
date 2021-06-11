@@ -37,4 +37,10 @@ public class UserController {
         var user = userService.findByUserName(username);
         return new ResponseEntity<>(UserWebModel.fromUser(user), HttpStatus.OK);
     }
+
+    @GetMapping
+    public ResponseEntity<?> getAll() {
+        var users = userService.getAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 }

@@ -1,5 +1,6 @@
 package com.stapply.backend.stapply.controller.login;
 
+import com.stapply.backend.stapply.controller.login.webmodel.TokenWebModel;
 import com.stapply.backend.stapply.controller.main.webmodel.AuthenticationRequest;
 import com.stapply.backend.stapply.controller.login.webmodel.CreateUserWebModel;
 import com.stapply.backend.stapply.models.User;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 
@@ -32,7 +35,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<TokenWebModel> login(@RequestBody AuthenticationRequest request) {
         var username = request.getUsername();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, request.getPassword()));
         var user = userService.findByUserName(username);
@@ -42,22 +45,20 @@ public class LoginController {
         }
 
         var token = jwtTokenProvider.createToken(username, user.getRoles());
-        var response = new HashMap<>();
-        response.put("username", username);
-        response.put("token", token);
-
-        return ResponseEntity.ok(response);
+        var res = new TokenWebModel(username, token);
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserWebModel request) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserWebModel createUserWebModel) {
         var user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setPassword(request.getPassword());
+        user.setUsername(createUserWebModel.getUsername());
+        user.setEmail(createUserWebModel.getEmail());
+        user.setFirstName(createUserWebModel.getFirstName());
+        user.setLastName(createUserWebModel.getLastName());
+        user.setPassword(createUserWebModel.getPassword());
         userService.register(user);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
