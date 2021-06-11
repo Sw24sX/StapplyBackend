@@ -21,12 +21,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
 //    @Override
 //    public void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests().antMatchers("/**").permitAll();
+//        http
+//                .httpBasic().disable()
+//                .csrf().disable()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authorizeRequests().antMatchers("/**").permitAll()
+//                .and()
+//                .apply(new JwtConfigurer(jwtTokenProvider));;
 //    }
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:4200")
+                .allowedOrigins("*")
                 .allowedMethods("*");
     }
 
