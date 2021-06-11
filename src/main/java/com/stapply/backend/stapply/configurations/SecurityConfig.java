@@ -50,10 +50,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//                .httpBasic().disable()
-//                .csrf().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
+                .httpBasic().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers(LOGIN_ENDPOINT).permitAll()
                 .antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
