@@ -1,7 +1,7 @@
 package com.stapply.backend.stapply.controller.test;
 
 import com.stapply.backend.stapply.controller.main.webmodel.AppMainPage;
-import com.stapply.backend.stapply.models.AppMain;
+import com.stapply.backend.stapply.domain.AppMain;
 import com.stapply.backend.stapply.service.appmain.AppMainService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
 package com.stapply.backend.stapply.controller.user.webmodel;
 
-import com.stapply.backend.stapply.models.Role;
+import com.stapply.backend.stapply.domain.Role;
 
 public class RoleWebModel {
     private Long id;

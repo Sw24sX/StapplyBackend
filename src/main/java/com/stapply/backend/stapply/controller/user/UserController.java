@@ -2,7 +2,6 @@ package com.stapply.backend.stapply.controller.user;
 
 import com.stapply.backend.stapply.components.AuthenticationFacade;
 import com.stapply.backend.stapply.controller.user.webmodel.UserWebModel;
-import com.stapply.backend.stapply.models.User;
 import com.stapply.backend.stapply.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

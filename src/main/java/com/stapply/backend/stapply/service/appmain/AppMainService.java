@@ -1,6 +1,6 @@
 package com.stapply.backend.stapply.service.appmain;
 
-import com.stapply.backend.stapply.models.AppMain;
+import com.stapply.backend.stapply.domain.AppMain;
 import com.stapply.backend.stapply.service.appmain.servicemodels.AppLinks;
 
 import java.util.List;

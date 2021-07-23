@@ -1,4 +1,4 @@
-package com.stapply.backend.stapply.models;
+package com.stapply.backend.stapply.domain;
 
 import javax.persistence.*;
 import java.util.List;

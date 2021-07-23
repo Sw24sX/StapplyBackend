@@ -1,6 +1,6 @@
 package com.stapply.backend.stapply.controller.main.webmodel;
 
-import com.stapply.backend.stapply.models.AppMain;
+import com.stapply.backend.stapply.domain.AppMain;
 
 public class AppMainPage {
     public final Long id;

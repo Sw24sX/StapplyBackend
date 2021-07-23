@@ -1,9 +1,5 @@
 package com.stapply.backend.stapply.controller.login.webmodel;
 
-import com.stapply.backend.stapply.models.User;
-
-import javax.validation.constraints.Pattern;
-
 public class CreateUserWebModel {
 //    @Pattern(regexp = "^[a-zA-Z0-9]+$")
     private String username;

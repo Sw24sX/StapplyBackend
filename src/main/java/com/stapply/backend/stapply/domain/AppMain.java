@@ -1,4 +1,4 @@
-package com.stapply.backend.stapply.models;
+package com.stapply.backend.stapply.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Value;

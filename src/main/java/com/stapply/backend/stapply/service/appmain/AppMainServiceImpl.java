@@ -1,6 +1,6 @@
 package com.stapply.backend.stapply.service.appmain;
 
-import com.stapply.backend.stapply.models.AppMain;
+import com.stapply.backend.stapply.domain.AppMain;
 import com.stapply.backend.stapply.parser.UserUrlParser;
 import com.stapply.backend.stapply.parser.mainscraper.ScraperFabric;
 import com.stapply.backend.stapply.parser.scraper.StoreScraper;

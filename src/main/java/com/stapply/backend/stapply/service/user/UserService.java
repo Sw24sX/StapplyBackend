@@ -1,6 +1,6 @@
 package com.stapply.backend.stapply.service.user;
 
-import com.stapply.backend.stapply.models.User;
+import com.stapply.backend.stapply.domain.User;
 
 import java.util.List;
 
