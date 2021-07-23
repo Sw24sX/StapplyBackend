@@ -1,8 +1,8 @@
 package com.stapply.backend.stapply.service.user;
 
-import com.stapply.backend.stapply.models.Role;
-import com.stapply.backend.stapply.models.Status;
-import com.stapply.backend.stapply.models.User;
+import com.stapply.backend.stapply.domain.Role;
+import com.stapply.backend.stapply.domain.Status;
+import com.stapply.backend.stapply.domain.User;
 import com.stapply.backend.stapply.repository.RoleRepository;
 import com.stapply.backend.stapply.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

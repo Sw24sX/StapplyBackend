@@ -1,6 +1,6 @@
 package com.stapply.backend.stapply.security;
 
-import com.stapply.backend.stapply.models.User;
+import com.stapply.backend.stapply.domain.User;
 import com.stapply.backend.stapply.security.jwt.JwtUser;
 import com.stapply.backend.stapply.security.jwt.JwtUserFactory;
 import com.stapply.backend.stapply.service.user.UserService;

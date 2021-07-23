@@ -3,7 +3,7 @@ package com.stapply.backend.stapply.controller.login;
 import com.stapply.backend.stapply.controller.login.webmodel.TokenWebModel;
 import com.stapply.backend.stapply.controller.main.webmodel.AuthenticationRequest;
 import com.stapply.backend.stapply.controller.login.webmodel.CreateUserWebModel;
-import com.stapply.backend.stapply.models.User;
+import com.stapply.backend.stapply.domain.User;
 import com.stapply.backend.stapply.security.jwt.JwtTokenProvider;
 import com.stapply.backend.stapply.service.user.UserService;
 import org.springframework.http.HttpStatus;
@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 

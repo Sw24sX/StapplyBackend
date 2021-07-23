@@ -1,9 +1,7 @@
 package com.stapply.backend.stapply.controller.user.webmodel;
 
-import com.stapply.backend.stapply.models.Role;
-import com.stapply.backend.stapply.models.User;
+import com.stapply.backend.stapply.domain.User;
 
-import javax.persistence.*;
 import java.util.List;
 import java.util.stream.Collectors;
 

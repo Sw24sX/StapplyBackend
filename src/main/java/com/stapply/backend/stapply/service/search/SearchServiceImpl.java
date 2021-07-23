@@ -1,17 +1,11 @@
 package com.stapply.backend.stapply.service.search;
 
-import com.stapply.backend.stapply.controller.search.webmodel.SearchApp;
-import com.stapply.backend.stapply.models.AppMain;
 import com.stapply.backend.stapply.parser.UserUrlParser;
 import com.stapply.backend.stapply.parser.mainscraper.ScraperFabric;
 import com.stapply.backend.stapply.parser.scraper.StoreScraper;
-import com.stapply.backend.stapply.parser.scraper.search.SearchAppImplInfo;
 import com.stapply.backend.stapply.repository.AppRepository;
-import com.stapply.backend.stapply.service.search.servicemodel.AppMarketId;
 import com.stapply.backend.stapply.service.search.servicemodel.AppMarketSearch;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

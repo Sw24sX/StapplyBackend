@@ -1,6 +1,6 @@
 package com.stapply.backend.stapply.repository;
 
-import com.stapply.backend.stapply.models.AppMain;
+import com.stapply.backend.stapply.domain.AppMain;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

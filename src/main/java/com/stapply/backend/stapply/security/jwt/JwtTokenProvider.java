@@ -1,6 +1,6 @@
 package com.stapply.backend.stapply.security.jwt;
 
-import com.stapply.backend.stapply.models.Role;
+import com.stapply.backend.stapply.domain.Role;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
