@@ -1,8 +1,11 @@
 package com.stapply.backend.stapply.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "roles")
 public class Role extends BaseEntity {
@@ -18,22 +21,4 @@ public class Role extends BaseEntity {
                 "id: " + super.getId() + ", " +
                 "name: " + name + "}";
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
-
 }
