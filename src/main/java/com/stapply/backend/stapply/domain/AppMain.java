@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "APPMAIN")
+//@Table(name = "APPMAIN")
 @Data
 public class AppMain {
     @Id

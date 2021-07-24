@@ -1,32 +1,40 @@
 package com.stapply.backend.stapply.domain;
 
+import com.stapply.backend.stapply.converter.RoleCodeConverter;
+import com.stapply.backend.stapply.enums.Role;
+import com.sun.istack.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "User")
 public class User extends BaseEntity{
-    @Column(name = "username", unique = true)
-    private String username;
+    @NotNull
+    @Column(name = "login")
+    private String login;
 
-    @Column(name = "first_name")
-    private String firstName;
+    @NotNull
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "last_name")
-    private String lastName;
+    @NotNull
+    @Column(name = "surname")
+    private String surname;
 
-    @Column(name = "email", unique = true)
-    private String email;
-
+    @NotNull
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-    private List<Role> roles;
+    @NotNull
+    @Column(name = "role_code", nullable = false)
+    @Convert(converter = RoleCodeConverter.class)
+    private Role role;
+
+    @ManyToMany(mappedBy = "users")
+    private List<App> apps;
 }

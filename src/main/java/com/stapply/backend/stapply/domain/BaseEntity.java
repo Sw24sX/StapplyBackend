@@ -1,6 +1,8 @@
 package com.stapply.backend.stapply.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -9,20 +11,10 @@ import java.util.Date;
 
 @Data
 @MappedSuperclass
+@EqualsAndHashCode(of = {"id"})
 public class BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator="seq")
+    @GenericGenerator(name = "seq", strategy="increment")
     private Long id;
-
-    @CreatedDate
-    @Column(name = "created")
-    private Date created;
-
-    @LastModifiedDate
-    @Column(name = "updated")
-    private Date updated;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private Status status;
 }
