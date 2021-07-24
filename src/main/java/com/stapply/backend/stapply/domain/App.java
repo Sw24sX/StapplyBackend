@@ -1,5 +1,6 @@
 package com.stapply.backend.stapply.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,6 +23,7 @@ public class App extends BaseEntity{
     @Column(name = "info_id")
     private Long infoID;
 
+    @JsonManagedReference("users-apps")
     @ManyToMany
     @JoinTable(name = "User_App",
             joinColumns = @JoinColumn(name = "app_id"),

@@ -1,14 +1,14 @@
 DROp SEQUENCE IF EXISTS "hibernate_sequence";
-DROP TABLE IF EXISTS "User" CASCADE;
-DROP TABLE IF EXISTS "Store" CASCADE;
-DROP TABLE IF EXISTS "App" CASCADE;
-DROP TABLE IF EXISTS "User_App" CASCADE;
-DROP TABLE IF EXISTS "Comment" CASCADE;
-DROP TABLE IF EXISTS "User_Info" CASCADE;
+DROP TABLE IF EXISTS "public.User" CASCADE;
+DROP TABLE IF EXISTS "public.Store" CASCADE;
+DROP TABLE IF EXISTS "public.App" CASCADE;
+DROP TABLE IF EXISTS "public.User_App" CASCADE;
+DROP TABLE IF EXISTS "public.Comment" CASCADE;
+DROP TABLE IF EXISTS "public.User_Info" CASCADE;
 
 create sequence hibernate_sequence start 1 increment 1;
 
-CREATE TABLE "User" (
+CREATE TABLE "public.User" (
     "id" int8 NOT NULL PRIMARY KEY,
     "name" varchar(255) NOT NULL,
     "surname" varchar(255) NOT NULL,
@@ -19,7 +19,8 @@ CREATE TABLE "User" (
 
 CREATE TABLE "User_Info" (
     "id" int8 NOT NULL PRIMARY KEY,
-    "email" varchar(255) NOT NULL
+    "email" varchar(255) NOT NULL,
+    "user_id" int8 NOT NULL REFERENCES "public.User" ("id")
 );
 
 CREATE TABLE "Store" (
@@ -38,7 +39,7 @@ CREATE TABLE "App" (
 
 CREATE TABLE "User_App" (
     "id" int8 NOT NULL PRIMARY KEY,
-    "user_id" int8 NOT NULL REFERENCES "User" ("id"),
+    "user_id" int8 NOT NULL REFERENCES "public.User" ("id"),
     "app_id" int8 NOT NULL REFERENCES "App" ("id"),
     UNIQUE ("user_id", "app_id")
 );

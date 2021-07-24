@@ -1,10 +1,8 @@
 package com.stapply.backend.stapply.enums;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import java.util.Arrays;
 
-public enum Role implements GrantedAuthority {
+public enum Role {
     USER(1),
     ADMIN(2);
 
@@ -23,10 +21,5 @@ public enum Role implements GrantedAuthority {
                 .filter(value -> value.code == code)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Wrong code = %d", code)));
-    }
-
-    @Override
-    public String getAuthority() {
-        return name();
     }
 }

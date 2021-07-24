@@ -1,5 +1,7 @@
 package com.stapply.backend.stapply.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.stapply.backend.stapply.converter.RoleCodeConverter;
 import com.stapply.backend.stapply.enums.Role;
 import com.sun.istack.NotNull;
@@ -35,6 +37,11 @@ public class User extends BaseEntity{
     @Convert(converter = RoleCodeConverter.class)
     private Role role;
 
+    @JsonBackReference("users-apps")
     @ManyToMany(mappedBy = "users")
     private List<App> apps;
+
+    @JsonManagedReference("user-userInfo")
+    @OneToOne(mappedBy = "user")
+    private UserInfo userInfo;
 }
