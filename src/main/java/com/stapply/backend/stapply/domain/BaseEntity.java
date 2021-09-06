@@ -1,5 +1,6 @@
 package com.stapply.backend.stapply.domain;
 
+import com.stapply.backend.stapply.enums.Status;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;

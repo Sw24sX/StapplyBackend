@@ -11,7 +11,7 @@ public class UserWebModel {
     private String firstName;
     private String lastName;
     private String email;
-    private List<RoleWebModel> roles;
+//    private List<RoleWebModel> roles;
 
     public String getUsername() {
         return username;
@@ -45,13 +45,6 @@ public class UserWebModel {
         this.email = email;
     }
 
-    public List<RoleWebModel> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<RoleWebModel> roles) {
-        this.roles = roles;
-    }
 
     public Long getId() {
         return id;
@@ -67,7 +60,7 @@ public class UserWebModel {
         result.firstName = user.getFirstName();
         result.lastName = user.getLastName();
         result.username = user.getUsername();
-        result.roles = user.getRoles().stream().map(RoleWebModel::fromRole).collect(Collectors.toList());
+//        result.roles = user.getRoles().stream().map(RoleWebModel::fromRole).collect(Collectors.toList());
         result.id = user.getId();
 
         return result;

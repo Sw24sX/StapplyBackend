@@ -2,6 +2,7 @@ package com.stapply.backend.stapply.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
@@ -10,50 +11,48 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "APPMAIN")
+@Table(name = "app")
 @Data
 public class AppMain {
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="seq")
+    @GenericGenerator(name = "seq", strategy="increment")
     @ApiModelProperty(notes = "this is id in database")
     private Long id;
 
-    @Column(name = "NAME")
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "DEVELOPER")
+    @Column(name = "developer")
     private String developer;
 
-    @Column(name = "AVATAR_SRC", length = 500)
-    @Lob
+    @Column(name = "avatar_src")
+//    @Lob
     private String avatarSrc;
 
-    @Column(name = "GOOGLE_PLAY_ID")
+    @Column(name = "google_play_id")
     private String googlePlayId;
 
-    @Column(name = "APP_STORE_ID")
+    @Column(name = "app_store_id")
     private String appStoreId;
 
-    @Column(name = "APP_GALLERY_ID")
+    @Column(name = "app_gallery_id")
     private String appGalleryId;
 
-    @Column(name = "IMG_SRC_LIST", length = 500)
-    @ElementCollection
-    private List<String> imageSrcList = new ArrayList<>();
+//    @Column(name = "img_src_list")
+//    @ElementCollection
+//    private List<String> imageSrcList = new ArrayList<>();
 
-    @Column(name = "DESCRIPTION", length = 1500)
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "SCORE_GOOGLE_PLAY")
-    @Value("0.0")
+    @Column(name = "score_google_play")
     private Double scoreGooglePlay;
 
-    @Column(name = "SCORE_APP_STORE")
-    @Value("0.0")
+    @Column(name = "score_app_store")
     private Double scoreAppStore;
 
-    @Column(name = "SCORE_APP_GALLERY")
-    @Value("0.0")
+    @Column(name = "score_app_gallery")
     private Double scoreAppGallery;
 }

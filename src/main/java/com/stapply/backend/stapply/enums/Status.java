@@ -1,4 +1,4 @@
-package com.stapply.backend.stapply.domain;
+package com.stapply.backend.stapply.enums;
 
 public enum Status {
     ACTIVE,

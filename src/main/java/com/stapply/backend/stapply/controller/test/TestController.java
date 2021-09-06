@@ -32,7 +32,7 @@ public class TestController {
         var t = new ArrayList<String>();
         t.add("https://play-lh.googleusercontent.com/U--y9KFmvZ-N2IPc_QuFvjt9113Mh48Qn6GtxQBYjBpNtG-lR9nTd3AFFB8PKIqkkyA=w1920-h1095-rw");
         for (var app : result) {
-            app.setImageSrcList(t);
+//            app.setImageSrcList(t);
             appService.update(app.getId(), app);
         }
         return new ResponseEntity<>(HttpStatus.OK);
@@ -56,7 +56,7 @@ public class TestController {
             app.setName(String.format(name, i));
             app.setDeveloper(String.format(developer, i));
             app.setAvatarSrc(avatarSrc);
-            app.setImageSrcList(imgSources);
+//            app.setImageSrcList(imgSources);
             appService.create(app);
         }
         return new ResponseEntity<>(HttpStatus.OK);

@@ -166,8 +166,8 @@ public class AppMainServiceImpl implements AppMainService{
             mainApp.setDescription(description);
         }
 
-        if(mainApp.getImageSrcList() == null || mainApp.getImageSrcList().isEmpty())
-            mainApp.setImageSrcList(app.images);
+//        if(mainApp.getImageSrcList() == null || mainApp.getImageSrcList().isEmpty())
+//            mainApp.setImageSrcList(app.images);
     }
 
     private boolean checkProperty(String value) {

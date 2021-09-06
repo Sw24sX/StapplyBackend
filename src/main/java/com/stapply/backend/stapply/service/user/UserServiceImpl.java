@@ -1,15 +1,11 @@
 package com.stapply.backend.stapply.service.user;
 
-import com.stapply.backend.stapply.domain.Role;
-import com.stapply.backend.stapply.domain.Status;
+import com.stapply.backend.stapply.enums.Status;
 import com.stapply.backend.stapply.domain.User;
-import com.stapply.backend.stapply.repository.RoleRepository;
 import com.stapply.backend.stapply.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,28 +13,25 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+//    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User register(User user) {
-        var roleUser = roleRepository.findByName("ROLE_USER");
-        var userRoles = new ArrayList<Role>();
-        userRoles.add(roleUser);
+//        var roleUser = roleRepository.findByName("ROLE_USER");
+//        var userRoles = new ArrayList<Role>();
+//        userRoles.add(roleUser);
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(userRoles);
+//        user.setPassword(passwordEncoder.encode(user.getPassword()));
+//        user.setRoles(userRoles);
 
-        user.setStatus(Status.ACTIVE);
-        user.setCreated(new Date());
-        user.setUpdated(new Date());
+//        user.setStatus(Status.ACTIVE);
+//        user.setCreated(new Date());
+//        user.setUpdated(new Date());
 
         var userRegistered = userRepository.save(user);
         return userRegistered;

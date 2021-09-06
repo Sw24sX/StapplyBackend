@@ -4,7 +4,6 @@ import com.stapply.backend.stapply.controller.login.webmodel.TokenWebModel;
 import com.stapply.backend.stapply.controller.main.webmodel.AuthenticationRequest;
 import com.stapply.backend.stapply.controller.login.webmodel.CreateUserWebModel;
 import com.stapply.backend.stapply.domain.User;
-import com.stapply.backend.stapply.security.jwt.JwtTokenProvider;
 import com.stapply.backend.stapply.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,17 +22,15 @@ import java.util.HashMap;
 @RequestMapping("/api/auth")
 public class LoginController {
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
-    public LoginController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public LoginController(AuthenticationManager authenticationManager, UserService userService) {
         this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenWebModel> login(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) {
         var username = request.getUsername();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, request.getPassword()));
         var user = userService.findByUserName(username);
@@ -42,9 +39,7 @@ public class LoginController {
             throw new UsernameNotFoundException("User with username: " + username + " not found");
         }
 
-        var token = jwtTokenProvider.createToken(username, user.getRoles());
-        var res = new TokenWebModel(username, token);
-        return ResponseEntity.ok(res);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/register")

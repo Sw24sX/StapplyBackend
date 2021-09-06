@@ -14,7 +14,8 @@ public class AppMainPage {
         this.name = app.getName();
         this.developer = app.getDeveloper();
         this.avatarSrc = app.getAvatarSrc();
-        var images =  app.getImageSrcList();
-        this.imageSrc = !images.isEmpty() ? images.get(0) : null;
+//        var images =  app.getImageSrcList();
+//        this.imageSrc = !images.isEmpty() ? images.get(0) : null;
+        this.imageSrc = "";
     }
 }

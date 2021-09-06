@@ -1,7 +1,5 @@
 package com.stapply.backend.stapply.configurations;
 
-import com.stapply.backend.stapply.security.jwt.JwtConfigurer;
-import com.stapply.backend.stapply.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,38 +35,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .allowedMethods("*");
     }
 
-    private final JwtTokenProvider jwtTokenProvider;
 
     private static final String ADMIN_ENDPOINT = "/api/admin/**";
     private static final String LOGIN_ENDPOINT = "/api/auth/**";
     private static final String LOGOUT_ENDPOINT = "/api/auth/logout";
 
 
-    @Autowired
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .httpBasic().disable()
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers(LOGIN_ENDPOINT).permitAll()
-                .antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
-                .antMatchers(LOGOUT_ENDPOINT).authenticated()
-                .anyRequest().authenticated()
-                .and()
-                .apply(new JwtConfigurer(jwtTokenProvider));
-    }
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http
+//                .httpBasic().disable()
+//                .csrf().disable()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers(LOGIN_ENDPOINT).permitAll()
+//                .antMatchers(ADMIN_ENDPOINT).hasRole("ADMIN")
+//                .antMatchers(LOGOUT_ENDPOINT).authenticated()
+//                .anyRequest().authenticated()
+//                .and()
+//                .apply(new JwtConfigurer(jwtTokenProvider));
+//    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
