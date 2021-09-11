@@ -7,6 +7,7 @@ import com.stapply.backend.stapply.parser.googleplay.GooglePlayDetailInfoScraper
 import com.stapply.backend.stapply.parser.googleplay.GooglePlayReviewsScraper;
 import com.stapply.backend.stapply.parser.googleplay.GooglePlaySearchScraper;
 import com.stapply.backend.stapply.parser.scraper.StoreScraper;
+import lombok.var;
 
 public class ScraperFabric {
     private static StoreScraper googlePlay = null;

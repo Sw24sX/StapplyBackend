@@ -1,6 +1,7 @@
 package com.stapply.backend.stapply.parser.scraper.review;
 
 import com.stapply.backend.stapply.parser.scraper.AppImpl;
+import lombok.var;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;

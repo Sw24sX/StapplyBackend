@@ -3,6 +3,7 @@ package com.stapply.backend.stapply.controller.search.webmodel;
 import com.stapply.backend.stapply.parser.scraper.search.SearchAppImplInfo;
 import com.stapply.backend.stapply.service.search.servicemodel.AppMarketId;
 import com.stapply.backend.stapply.service.search.servicemodel.AppMarketSearch;
+import lombok.var;
 
 import java.util.Arrays;
 

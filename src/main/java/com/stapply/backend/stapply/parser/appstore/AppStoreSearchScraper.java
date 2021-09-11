@@ -3,6 +3,7 @@ package com.stapply.backend.stapply.parser.appstore;
 
 import com.stapply.backend.stapply.parser.scraper.search.SearchAppImplInfo;
 import com.stapply.backend.stapply.parser.scraper.search.StoreSearchScraper;
+import lombok.var;
 import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;

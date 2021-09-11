@@ -4,6 +4,7 @@ package com.stapply.backend.stapply.parser.appstore;
 import com.stapply.backend.stapply.parser.scraper.AppImpl;
 import com.stapply.backend.stapply.parser.scraper.review.IReviewScraper;
 import com.stapply.backend.stapply.parser.scraper.review.Review;
+import lombok.var;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;

@@ -10,6 +10,7 @@ import com.stapply.backend.stapply.service.search.SearchService;
 import com.stapply.backend.stapply.service.search.SearchServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

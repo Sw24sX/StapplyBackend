@@ -1,5 +1,7 @@
 package com.stapply.backend.stapply.parser;
 
+import lombok.var;
+
 import java.util.HashMap;
 
 public class UserUrlParser {

@@ -1,6 +1,7 @@
 package com.stapply.backend.stapply.controller.main.webmodel;
 
 import com.stapply.backend.stapply.domain.AppMain;
+import lombok.var;
 
 public class AppMainPage {
     public final Long id;

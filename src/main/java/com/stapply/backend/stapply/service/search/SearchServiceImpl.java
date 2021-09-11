@@ -5,6 +5,7 @@ import com.stapply.backend.stapply.parser.mainscraper.ScraperFabric;
 import com.stapply.backend.stapply.parser.scraper.StoreScraper;
 import com.stapply.backend.stapply.repository.AppRepository;
 import com.stapply.backend.stapply.service.search.servicemodel.AppMarketSearch;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -7,6 +7,7 @@ import com.stapply.backend.stapply.parser.scraper.StoreScraper;
 import com.stapply.backend.stapply.parser.scraper.detailed.FullAppImplInfo;
 import com.stapply.backend.stapply.repository.AppRepository;
 import com.stapply.backend.stapply.service.appmain.servicemodels.AppLinks;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

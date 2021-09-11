@@ -1,6 +1,7 @@
 package com.stapply.backend.stapply.controller.search.webmodel;
 
 import com.stapply.backend.stapply.service.appmain.servicemodels.AppLinks;
+import lombok.var;
 
 public class AddApp {
     private String name;

@@ -4,6 +4,7 @@ package com.stapply.backend.stapply.parser.googleplay;
 import com.stapply.backend.stapply.parser.scraper.AppImpl;
 import com.stapply.backend.stapply.parser.scraper.review.IReviewScraper;
 import com.stapply.backend.stapply.parser.scraper.review.Review;
+import lombok.var;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;

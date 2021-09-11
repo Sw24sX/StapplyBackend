@@ -4,6 +4,7 @@ import com.stapply.backend.stapply.controller.main.webmodel.AppMainPage;
 import com.stapply.backend.stapply.domain.AppMain;
 import com.stapply.backend.stapply.service.appmain.AppMainService;
 import io.swagger.annotations.ApiOperation;
+import lombok.var;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

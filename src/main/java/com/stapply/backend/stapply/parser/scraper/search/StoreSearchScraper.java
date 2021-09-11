@@ -1,5 +1,6 @@
 package com.stapply.backend.stapply.parser.scraper.search;
 
+import lombok.var;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
