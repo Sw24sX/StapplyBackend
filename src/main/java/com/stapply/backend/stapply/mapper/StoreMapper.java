@@ -6,9 +6,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
-@Mapper
+import java.util.List;
+
+@Mapper(componentModel = "spring")
 public interface StoreMapper {
     StoreDto storeToStoreDto(Store store);
+    List<StoreDto> listStoreToStoreDto(List<Store> stores);
 
     @Mappings({
             @Mapping(target = "id", ignore = true)
