@@ -2,8 +2,8 @@ package com.stapply.backend.stapply.controller;
 
 import com.stapply.backend.stapply.domain.User;
 import com.stapply.backend.stapply.domain.UserInfo;
-import com.stapply.backend.stapply.dto.UserInfoSet;
-import com.stapply.backend.stapply.dto.UserSetDto;
+import com.stapply.backend.stapply.dto.UserInfoDto;
+import com.stapply.backend.stapply.dto.UserDto;
 import com.stapply.backend.stapply.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +31,17 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody UserSetDto user) {
+    public User createUser(@RequestBody UserDto user) {
         return userService.createUser(user.toUser());
     }
 
     @PutMapping("{id}")
-    public User updateUser(@PathVariable(name = "id") Long id, @RequestBody UserSetDto user) {
+    public User updateUser(@PathVariable(name = "id") Long id, @RequestBody UserDto user) {
         return userService.updateUser(id, user.toUser());
     }
 
     @PutMapping("{user_id}/info")
-    public UserInfo updateUserInfo(@PathVariable(name = "user_id") Long userId, @RequestBody UserInfoSet userInfo) {
+    public UserInfo updateUserInfo(@PathVariable(name = "user_id") Long userId, @RequestBody UserInfoDto userInfo) {
         return userService.updateInfo(userId, userInfo.toUserInfo());
     }
 

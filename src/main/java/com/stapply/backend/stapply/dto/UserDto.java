@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 import java.util.List;
 
 @Data
-public class UserSetDto {
+public class UserDto {
     private String login;
     private String name;
     private String surname;
